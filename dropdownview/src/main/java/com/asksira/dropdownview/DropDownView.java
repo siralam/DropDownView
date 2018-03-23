@@ -144,6 +144,10 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
 
     public void expand () {
         if (state == EXPANDED) return;
+        if (isArrowRotate) {
+            filterArrow.setRotation(0);
+            filterArrow.animate().rotationBy(-180).setDuration(300).start();
+        }
         Transition transition = new ChangeBounds();
         transition.setDuration(300);
         TransitionManager.beginDelayedTransition(this, transition);
@@ -155,6 +159,10 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
 
     public void collapse () {
         if (state == COLLAPSED) return;
+        if (isArrowRotate) {
+            filterArrow.setRotation(180);
+            filterArrow.animate().rotationBy(180).setDuration(300).start();
+        }
         Transition transition = new ChangeBounds();
         transition.setDuration(300);
         TransitionManager.beginDelayedTransition(this, transition);
