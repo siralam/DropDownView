@@ -9,6 +9,7 @@
         <attr name="arrow_rotate" format="boolean" />
         <attr name="divider_height" format="dimension"/>
         <attr name="divider_color" format="reference" />
+        <attr name="dropDownItem_height" format="dimension"/>
         <attr name="dropDownItem_text_size" format="dimension"/>
         <attr name="dropDownItem_text_color" format="reference" />
         <attr name="dropDownItem_background_color" format="reference"/>

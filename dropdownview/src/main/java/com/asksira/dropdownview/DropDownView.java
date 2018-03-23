@@ -34,15 +34,16 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
     private LinearLayout dropDownItemsContainer;
 
     //Configurable Attributes
-    private int filterHeight;
+    private float filterHeight;
     private float textSize;
     private int textColorSelected;
     private int arrowDrawableResId;
     private boolean isArrowRotate;
     private float dividerHeight;
     private int dividerColor;
+    private float dropDownItemHeight;
     private float dropDownItemTextSize;
-    private int dropDownitemTextColor;
+    private int dropDownItemTextColor;
     private int dropDownBackgroundColor;
     private boolean isExpandDimBackground;
     private boolean isExpandIncludeSelectedItem;
@@ -60,7 +61,6 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
     public static final int EXPANDED = 2;
     private List<String> dropDownItemList;
 
-
     public DropDownView(Context context) {
         super(context);
         init(context);
@@ -70,15 +70,16 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
         super(context, attrs);
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.DropDownView, 0, 0);
         try {
-            filterHeight = a.getInt(R.styleable.DropDownView_filter_height, LayoutUtils.pixelFromDp(getResources(), 56));
-            textSize = a.getFloat(R.styleable.DropDownView_text_size, getResources().getDimension(R.dimen.filter_text_selected_default_size));
+            filterHeight = a.getDimension(R.styleable.DropDownView_filter_height, getResources().getDimension(R.dimen.filter_default_height));
+            textSize = a.getDimension(R.styleable.DropDownView_text_size, getResources().getDimension(R.dimen.filter_text_selected_default_size));
             textColorSelected = a.getResourceId(R.styleable.DropDownView_text_color_selected, R.color.dropdown_default_text_color);
             arrowDrawableResId = a.getResourceId(R.styleable.DropDownView_arrow_drawable, 0);
             isArrowRotate = a.getBoolean(R.styleable.DropDownView_arrow_rotate, true);
-            dividerHeight = a.getFloat(R.styleable.DropDownView_divider_height, LayoutUtils.pixelFromDp(getResources(), 1));
+            dividerHeight = a.getDimension(R.styleable.DropDownView_divider_height, getResources().getDimension(R.dimen.filter_divider_default_height));
             dividerColor = a.getResourceId(R.styleable.DropDownView_divider_color, R.color.dropdown_default_divider_coloir);
-            dropDownItemTextSize = a.getFloat(R.styleable.DropDownView_dropDownItem_text_size, getResources().getDimension(R.dimen.filter_text_default_size));
-            dropDownitemTextColor = a.getResourceId(R.styleable.DropDownView_dropDownItem_text_color, R.color.dropdown_default_text_color);
+            dropDownItemHeight = a.getDimension(R.styleable.DropDownView_dropDownItem_height, getResources().getDimension(R.dimen.filter_dropDownItem_default_height));
+            dropDownItemTextSize = a.getDimension(R.styleable.DropDownView_dropDownItem_text_size, getResources().getDimension(R.dimen.filter_text_default_size));
+            dropDownItemTextColor = a.getResourceId(R.styleable.DropDownView_dropDownItem_text_color, R.color.dropdown_default_text_color);
             dropDownBackgroundColor = a.getResourceId(R.styleable.DropDownView_dropDownItem_background_color, android.R.color.white);
             isExpandDimBackground = a.getBoolean(R.styleable.DropDownView_expand_dim_background, true);
             isExpandIncludeSelectedItem = a.getBoolean(R.styleable.DropDownView_expand_include_selected_item, true);
@@ -105,7 +106,7 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
         dropDownItemsContainer = findViewById(R.id.ll_dropdown_items_container);
 
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) filterContainer.getLayoutParams();
-        lp.height = filterHeight;
+        lp.height = (int)filterHeight;
         filterContainer.setLayoutParams(lp);
 
         filterTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
@@ -187,12 +188,12 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
 
     private TextView generateDropDownItem (String itemName) {
         TextView textView = new TextView(context);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MATCH_PARENT, LayoutUtils.pixelFromDp(getResources(), 48));
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MATCH_PARENT, (int)dropDownItemHeight);
         textView.setLayoutParams(lp);
         textView.setText(itemName);
         textView.setBackgroundColor(ContextCompat.getColor(context, dropDownBackgroundColor));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, dropDownItemTextSize);
-        textView.setTextColor(ContextCompat.getColor(context, dropDownitemTextColor));
+        textView.setTextColor(ContextCompat.getColor(context, dropDownItemTextColor));
         textView.setGravity(Gravity.CENTER);
         return textView;
     }
