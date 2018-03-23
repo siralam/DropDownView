@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="DropDownView">
+        <attr name="filter_height" format="dimension" />
+        <attr name="text_size" format="dimension"/>
+        <attr name="text_color_selected" format="reference"/>
+        <attr name="arrow_drawable" format="reference" />
+        <attr name="arrow_rotate" format="boolean" />
+        <attr name="divider_height" format="dimension"/>
+        <attr name="divider_color" format="reference" />
+        <attr name="dropDownItem_text_size" format="dimension"/>
+        <attr name="dropDownItem_text_color" format="reference" />
+        <attr name="dropDownItem_background_color" format="reference"/>
+        <attr name="expand_dim_background" format="boolean"/>
+        <attr name="expand_include_selected_item" format="boolean"/>
+        <attr name="placeholder_text" format="reference"/>
+    </declare-styleable>
+
+
+</resources>

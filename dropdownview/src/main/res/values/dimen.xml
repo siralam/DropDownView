@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="filter_text_selected_default_size">18sp</dimen>
+    <dimen name="filter_text_default_size">16sp</dimen>
+
+</resources>

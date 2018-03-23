@@ -5,11 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.asksira.dropdownview.DropDownView;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    DropDownView dropDownView;
     RecyclerView recyclerView;
     JustAnAdapter adapter;
 
@@ -17,11 +20,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        dropDownView = findViewById(R.id.dropdownview);
         recyclerView = findViewById(R.id.recyclerview);
 
         adapter = new JustAnAdapter(this, generateList());
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
+
+        dropDownView.setDropDownListItem(generateFilterList());
     }
 
     private List<String> generateList () {
@@ -29,6 +35,13 @@ public class MainActivity extends AppCompatActivity {
         for (int i=1; i < 51; i++) {
             list.add(String.valueOf(i));
         }
+        return list;
+    }
+
+    private List<String> generateFilterList () {
+        List<String> list = new ArrayList<>();
+        list.add("odd");
+        list.add("even");
         return list;
     }
 }
