@@ -3,13 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/filter_container"
         android:layout_width="wrap_content"
         android:layout_height="56dp"
         android:layout_gravity="center"
+        android:background="@android:color/holo_green_light"
         android:orientation="horizontal">
 
         <TextView
@@ -27,24 +29,30 @@
 
     </LinearLayout>
 
-    <View
-        android:id="@+id/debug"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@android:color/holo_green_light" />
+        android:layout_height="match_parent">
 
-    <ScrollView
-        android:id="@+id/sv_dropdown_container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:clickable="true">
-
-        <LinearLayout
-            android:id="@+id/ll_dropdown_items_container"
+        <View
+            android:id="@+id/background_dim"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"/>
+            android:layout_height="match_parent"
+            android:visibility="invisible"/>
 
-    </ScrollView>
+        <ScrollView
+            android:id="@+id/sv_dropdown_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:clickable="true">
+
+            <LinearLayout
+                android:id="@+id/ll_dropdown_items_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+        </ScrollView>
+
+    </FrameLayout>
 
 </merge>

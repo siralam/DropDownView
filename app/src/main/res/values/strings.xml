@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">DropDownViewDemo</string>
+    <string name="placeholder_text">GuaGuaGua</string>
 </resources>

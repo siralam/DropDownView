@@ -3,5 +3,5 @@
 
     <color name="dropdown_default_text_color">#212121</color>
     <color name="dropdown_default_divider_coloir">#BDBDBD</color>
-
+    <color name="dropdown_background_dim">#80000000</color>
 </resources>

@@ -15,7 +15,7 @@
         <attr name="dropDownItem_background_color" format="reference"/>
         <attr name="expand_dim_background" format="boolean"/>
         <attr name="expand_include_selected_item" format="boolean"/>
-        <attr name="placeholder_text" format="reference"/>
+        <attr name="placeholder_text" format="string"/>
     </declare-styleable>
 
 

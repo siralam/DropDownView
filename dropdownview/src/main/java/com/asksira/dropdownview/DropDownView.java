@@ -8,14 +8,16 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.transitionseverywhere.ChangeBounds;
-import com.transitionseverywhere.Transition;
+import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.TransitionManager;
+import com.transitionseverywhere.TransitionSet;
 
 import java.util.List;
 
@@ -32,6 +34,7 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
     private ImageView filterArrow;
     private ScrollView dropDownContainer;
     private LinearLayout dropDownItemsContainer;
+    private View backgroundDimView;
 
     //Configurable Attributes
     private float filterHeight;
@@ -104,6 +107,7 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
         filterArrow = findViewById(R.id.filter_arrow);
         dropDownContainer = findViewById(R.id.sv_dropdown_container);
         dropDownItemsContainer = findViewById(R.id.ll_dropdown_items_container);
+        backgroundDimView = findViewById(R.id.background_dim);
 
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) filterContainer.getLayoutParams();
         lp.height = (int)filterHeight;
@@ -123,6 +127,15 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
         }
 
         filterContainer.setOnClickListener(this);
+
+        backgroundDimView.setBackgroundColor(ContextCompat.getColor(context,
+                isExpandDimBackground ? R.color.dropdown_background_dim : android.R.color.transparent));
+        backgroundDimView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                collapse();
+            }
+        });
     }
 
     @Override
@@ -149,10 +162,13 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
             filterArrow.setRotation(0);
             filterArrow.animate().rotationBy(-180).setDuration(300).start();
         }
-        Transition transition = new ChangeBounds();
-        transition.setDuration(300);
-        TransitionManager.beginDelayedTransition(this, transition);
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) dropDownContainer.getLayoutParams();
+        TransitionSet transitionSet = new TransitionSet();
+        transitionSet.addTransition(new ChangeBounds());
+        transitionSet.addTransition(new Fade());
+        transitionSet.setDuration(300);
+        TransitionManager.beginDelayedTransition(this, transitionSet);
+        backgroundDimView.setVisibility(VISIBLE);
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) dropDownContainer.getLayoutParams();
         lp.height = WRAP_CONTENT;
         dropDownContainer.setLayoutParams(lp);
         state = EXPANDED;
@@ -164,10 +180,13 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
             filterArrow.setRotation(180);
             filterArrow.animate().rotationBy(180).setDuration(300).start();
         }
-        Transition transition = new ChangeBounds();
-        transition.setDuration(300);
-        TransitionManager.beginDelayedTransition(this, transition);
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) dropDownContainer.getLayoutParams();
+        TransitionSet transitionSet = new TransitionSet();
+        transitionSet.addTransition(new ChangeBounds());
+        transitionSet.addTransition(new Fade());
+        transitionSet.setDuration(300);
+        TransitionManager.beginDelayedTransition(this, transitionSet);
+        backgroundDimView.setVisibility(INVISIBLE);
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) dropDownContainer.getLayoutParams();
         lp.height = 0;
         dropDownContainer.setLayoutParams(lp);
         state = COLLAPSED;
