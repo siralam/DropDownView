@@ -61,6 +61,7 @@ public class DropDownView extends LinearLayout {
     private int dropDownBackgroundColor;
     private int dropDownBackgroundColorSelected;
     private boolean isExpandDimBackground;
+    private int dimBackgroundColor;
     private boolean isExpandIncludeSelectedItem;
     private String placeholderText;
     private int typeface;
@@ -111,6 +112,7 @@ public class DropDownView extends LinearLayout {
             dropDownBackgroundColor = a.getResourceId(R.styleable.DropDownView_dropDownItem_background_color, android.R.color.white);
             dropDownBackgroundColorSelected = a.getResourceId(R.styleable.DropDownView_dropDownItem_background_color_selected, android.R.color.white);
             isExpandDimBackground = a.getBoolean(R.styleable.DropDownView_expand_dim_background, true);
+            dimBackgroundColor = a.getResourceId(R.styleable.DropDownView_dim_background_color, R.color.dropdown_background_dim);
             isExpandIncludeSelectedItem = a.getBoolean(R.styleable.DropDownView_expand_include_selected_item, true);
             placeholderText = a.getString(R.styleable.DropDownView_placeholder_text);
             typeface = a.getResourceId(R.styleable.DropDownView_dropdown_typeface, 0);
@@ -179,7 +181,7 @@ public class DropDownView extends LinearLayout {
 
         //Configure background dim
         backgroundDimView.setBackgroundColor(ContextCompat.getColor(context,
-                isExpandDimBackground ? R.color.dropdown_background_dim : android.R.color.transparent));
+                isExpandDimBackground ? dimBackgroundColor: android.R.color.transparent));
         backgroundDimView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -443,90 +445,72 @@ public class DropDownView extends LinearLayout {
      * View configurations
      */
 
-    public void setFilterHeight(float filterHeightPixels) {
-        this.filterHeight = filterHeightPixels;
+    public void setFilterHeight(float px) {
+        this.filterHeight = px;
         invalidate();
     }
 
-    public void setTextSize(float textSizePixels) {
-        this.textSize = textSizePixels;
+    public void setTextSize(float px) {
+        this.textSize = px;
         invalidate();
     }
 
-    /**
-     * This method accepts a color value, do not pass in a color resource id.
-     */
-    public void setFilterTextColor(int filterTextColor) {
-        this.filterTextColor = filterTextColor;
+    public void setFilterTextColor(int colorResourceID) {
+        this.filterTextColor = colorResourceID;
         invalidate();
     }
 
-    /**
-     * This method accepts a color value, do not pass in a color resource id.
-     */
-    public void setFilterBarBackgroundColor(int filterBarBackgroundColor) {
-        this.filterBarBackgroundColor = filterBarBackgroundColor;
+    public void setFilterBarBackgroundColor(int colorResourceID) {
+        this.filterBarBackgroundColor = colorResourceID;
         invalidate();
     }
 
-    public void setArrowDrawableResId(int arrowDrawableResId) {
-        this.arrowDrawableResId = arrowDrawableResId;
+    public void setArrowDrawableResId(int drawableResId) {
+        this.arrowDrawableResId = drawableResId;
         invalidate();
     }
 
-    public void setArrowRotate(boolean arrowRotate) {
-        isArrowRotate = arrowRotate;
-        filterArrow.setRotation(0);
+    public void setArrowRotate(boolean yes) {
+        isArrowRotate = yes;
+        if (!yes) filterArrow.setRotation(0);
     }
 
-    public void setDividerHeight(float dividerHeightPixels) {
-        this.dividerHeight = dividerHeightPixels;
+    public void setDividerHeight(float px) {
+        this.dividerHeight = px;
         invalidate();
     }
 
-    /**
-     * This method accepts a color value, do not pass in a color resource id.
-     */
-    public void setDividerColor(int dividerColor) {
-        this.dividerColor = dividerColor;
+    public void setDividerColor(int colorResourceID) {
+        this.dividerColor = colorResourceID;
         invalidate();
     }
 
-    public void setDropDownItemHeight(float dropDownItemHeightPixels) {
-        this.dropDownItemHeight = dropDownItemHeightPixels;
+    public void setDropDownItemHeight(float px) {
+        this.dropDownItemHeight = px;
     }
 
-    public void setDropDownItemTextSize(float dropDownItemTextSizePixels) {
-        this.dropDownItemTextSize = dropDownItemTextSizePixels;
+    public void setDropDownItemTextSize(float px) {
+        this.dropDownItemTextSize = px;
     }
 
-    /**
-     * This method accepts a color value, do not pass in a color resource id.
-     */
-    public void setDropDownItemTextColor(int dropDownItemTextColor) {
-        this.dropDownItemTextColor = dropDownItemTextColor;
+    public void setDropDownItemTextColor(int colorResourceID) {
+        this.dropDownItemTextColor = colorResourceID;
     }
 
-    /**
-     * This method accepts a color value, do not pass in a color resource id.
-     */
-    public void setDropDownItemTextColorSelected(int dropDownItemTextColorSelected) {
-        this.dropDownItemTextColorSelected = dropDownItemTextColorSelected;
+    public void setDropDownItemTextColorSelected(int colorResourceID) {
+        this.dropDownItemTextColorSelected = colorResourceID;
     }
 
-    /**
-     * This method accepts a color value, do not pass in a color resource id.
-     */
-    public void setDropDownBackgroundColor(int dropDownBackgroundColor) {
-        this.dropDownBackgroundColor = dropDownBackgroundColor;
+    public void setDropDownBackgroundColor(int colorResourceID) {
+        this.dropDownBackgroundColor = colorResourceID;
     }
 
-    public void setExpandDimBackground(boolean expandDimBackground) {
-        isExpandDimBackground = expandDimBackground;
+    public void setExpandDimBackground(boolean yes) {
+        isExpandDimBackground = yes;
     }
 
-    public void setExpandIncludeSelectedItem(boolean expandIncludeSelectedItem) {
-        isExpandIncludeSelectedItem = expandIncludeSelectedItem;
+    public void setExpandIncludeSelectedItem(boolean yes) {
+        isExpandIncludeSelectedItem = yes;
     }
 
     public void setPlaceholderText(String placeholderText) {
@@ -543,29 +527,31 @@ public class DropDownView extends LinearLayout {
         this.animationDuration = ms;
     }
 
-    public void setFilterTextArrowPadding(float filterTextArrowPaddingPixels) {
-        this.filterTextArrowPadding = filterTextArrowPaddingPixels;
+    public void setFilterTextArrowPadding(float px) {
+        this.filterTextArrowPadding = px;
         invalidate();
     }
 
-    public void setArrowWidth(float arrowWidthPixels) {
-        this.arrowWidth = arrowWidthPixels;
+    public void setArrowWidth(float px) {
+        this.arrowWidth = px;
         invalidate();
     }
 
-    public void setArrowHeight(float arrowHeightPixels) {
-        this.arrowHeight = arrowHeightPixels;
+    public void setArrowHeight(float px) {
+        this.arrowHeight = px;
         invalidate();
     }
 
-    public void setDropDownItemTextSizeSelected(float dropDownItemTextSizeSelectedPixels) {
-        this.dropDownItemTextSizeSelected = dropDownItemTextSizeSelectedPixels;
+    public void setDropDownItemTextSizeSelected(float px) {
+        this.dropDownItemTextSizeSelected = px;
     }
 
-    /**
-     * This method accepts a color value, do not pass in a color resource id.
-     */
-    public void setDropDownBackgroundColorSelected(int dropDownBackgroundColorSelected) {
-        this.dropDownBackgroundColorSelected = dropDownBackgroundColorSelected;
+    public void setDropDownBackgroundColorSelected(int colorResourceID) {
+        this.dropDownBackgroundColorSelected = colorResourceID;
+    }
+
+    public void setDimBackgroundColor(int colorResourceID) {
+        this.dimBackgroundColor = colorResourceID;
+        invalidate();
     }
 }

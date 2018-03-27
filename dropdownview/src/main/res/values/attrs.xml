@@ -21,6 +21,7 @@
         <attr name="dropDownItem_background_color" format="reference"/>
         <attr name="dropDownItem_background_color_selected" format="reference"/>
         <attr name="expand_dim_background" format="boolean"/>
+        <attr name="dim_background_color" format="reference" />
         <attr name="expand_include_selected_item" format="boolean"/>
         <attr name="placeholder_text" format="string"/>
         <attr name="dropdown_typeface" format="reference"/>

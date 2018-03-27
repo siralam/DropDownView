@@ -21,7 +21,7 @@
         app:arrow_width="24dp"
         app:dropDownItem_text_color_selected="@android:color/holo_orange_dark"
         app:divider_color="@android:color/holo_orange_light"
-        app:dropDownItem_text_size_selected="18sp"/>
+        app:dropDownItem_text_size_selected="18sp" />
 
 
 </RelativeLayout>
