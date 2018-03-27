@@ -6,6 +6,7 @@
         <attr name="filter_text_size" format="dimension"/>
         <attr name="filter_text_color" format="reference"/>
         <attr name="filter_bar_background_color" format="reference"/>
+        <attr name="filter_text_arrow_padding" format="dimension"/>
         <attr name="arrow_width" format="dimension" />
         <attr name="arrow_height" format="dimension" />
         <attr name="arrow_drawable" format="reference" />
@@ -14,9 +15,11 @@
         <attr name="divider_color" format="reference" />
         <attr name="dropDownItem_height" format="dimension"/>
         <attr name="dropDownItem_text_size" format="dimension"/>
+        <attr name="dropDownItem_text_size_selected" format="dimension"/>
         <attr name="dropDownItem_text_color" format="reference" />
         <attr name="dropDownItem_text_color_selected" format="reference"/>
         <attr name="dropDownItem_background_color" format="reference"/>
+        <attr name="dropDownItem_background_color_selected" format="reference"/>
         <attr name="expand_dim_background" format="boolean"/>
         <attr name="expand_include_selected_item" format="boolean"/>
         <attr name="placeholder_text" format="string"/>
