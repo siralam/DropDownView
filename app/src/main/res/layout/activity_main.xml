@@ -14,7 +14,8 @@
         android:id="@+id/dropdownview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:placeholder_text="Guaguagua"/>
+        app:placeholder_text="Guaguagua"
+        app:expand_include_selected_item="false"/>
 
 
 </RelativeLayout>

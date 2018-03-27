@@ -164,6 +164,7 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
 
     public void expand () {
         if (state == EXPANDED) return;
+        updateDropDownItems();
         if (isArrowRotate) {
             filterArrow.setRotation(0);
             filterArrow.animate().rotationBy(-180).setDuration(300).start();
@@ -190,6 +191,7 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
         transitionSet.addTransition(new ChangeBounds());
         transitionSet.addTransition(new Fade());
         transitionSet.setDuration(300);
+        transitionSet.excludeTarget(filterTextView, true);
         TransitionManager.beginDelayedTransition(this, transitionSet);
         backgroundDimView.setVisibility(INVISIBLE);
         FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) dropDownContainer.getLayoutParams();
@@ -206,6 +208,9 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
     private void updateDropDownItems () {
         dropDownItemsContainer.removeAllViews();
         for (int i=0; i < dropDownItemList.size(); i++) {
+            if (!isExpandIncludeSelectedItem) {
+                if (i == selectingPosition) continue;
+            }
             dropDownItemsContainer.addView(generateDropDownItem(dropDownItemList.get(i), i));
             dropDownItemsContainer.addView(generateDivider());
         }
@@ -228,8 +233,7 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
         textView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onSelectionListener != null) onSelectionListener.onItemSelected(DropDownView.this, index);
-                collapse();
+                setSelectingPosition(index);
             }
         });
         return textView;
@@ -246,5 +250,16 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
 
     public void setOnSelectionListener(OnSelectionListener onSelectionListener) {
         this.onSelectionListener = onSelectionListener;
+    }
+
+    public int getSelectingPosition() {
+        return selectingPosition;
+    }
+
+    public void setSelectingPosition(int selectingPosition) {
+        this.selectingPosition = selectingPosition;
+        filterTextView.setText(dropDownItemList.get(selectingPosition));
+        if (onSelectionListener != null) onSelectionListener.onItemSelected(DropDownView.this, selectingPosition);
+        collapse();
     }
 }
