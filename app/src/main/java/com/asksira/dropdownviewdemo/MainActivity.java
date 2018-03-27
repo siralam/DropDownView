@@ -28,6 +28,22 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         dropDownView.setDropDownListItem(generateFilterList());
+        dropDownView.setOnSelectionListener(new DropDownView.OnSelectionListener() {
+            @Override
+            public void onItemSelected(DropDownView view, int position) {
+                switch (position) {
+                    case 1:
+                        adapter.setStringList(generateOddList());
+                        break;
+                    case 2:
+                        adapter.setStringList(generateEvenList());
+                        break;
+                    default:
+                        adapter.setStringList(generateList());
+                        break;
+                }
+            }
+        });
     }
 
     private List<String> generateList () {
@@ -38,8 +54,25 @@ public class MainActivity extends AppCompatActivity {
         return list;
     }
 
+    private List<String> generateOddList () {
+        List<String> list = new ArrayList<>();
+        for (int i=1; i < 51; i = i + 2) {
+            list.add(String.valueOf(i));
+        }
+        return list;
+    }
+
+    private List<String> generateEvenList () {
+        List<String> list = new ArrayList<>();
+        for (int i=2; i < 51; i = i + 2) {
+            list.add(String.valueOf(i));
+        }
+        return list;
+    }
+
     private List<String> generateFilterList () {
         List<String> list = new ArrayList<>();
+        list.add("All");
         list.add("odd");
         list.add("even");
         return list;

@@ -24,6 +24,11 @@ public class JustAnAdapter extends RecyclerView.Adapter<JustAnAdapter.JustAViewH
         return new JustAViewHolder(LayoutInflater.from(context).inflate(R.layout.item_string, parent, false));
     }
 
+    public void setStringList (List<String> list) {
+        stringList = list;
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(JustAViewHolder holder, int position) {
         holder.bind(position);

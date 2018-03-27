@@ -2,6 +2,7 @@ package com.asksira.dropdownview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -63,6 +64,11 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
     public static final int COLLAPSED = 1;
     public static final int EXPANDED = 2;
     private List<String> dropDownItemList;
+
+    public interface OnSelectionListener {
+        void onItemSelected (DropDownView view, int position);
+    }
+    private OnSelectionListener onSelectionListener;
 
     public DropDownView(Context context) {
         super(context);
@@ -200,20 +206,32 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
     private void updateDropDownItems () {
         dropDownItemsContainer.removeAllViews();
         for (int i=0; i < dropDownItemList.size(); i++) {
-            dropDownItemsContainer.addView(generateDropDownItem(dropDownItemList.get(i)));
+            dropDownItemsContainer.addView(generateDropDownItem(dropDownItemList.get(i), i));
             dropDownItemsContainer.addView(generateDivider());
         }
     }
 
-    private TextView generateDropDownItem (String itemName) {
+    private TextView generateDropDownItem (String itemName, final int index) {
         TextView textView = new TextView(context);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MATCH_PARENT, (int)dropDownItemHeight);
         textView.setLayoutParams(lp);
         textView.setText(itemName);
         textView.setBackgroundColor(ContextCompat.getColor(context, dropDownBackgroundColor));
+        if (Build.VERSION.SDK_INT >= 23) {
+            TypedValue typedValue = new TypedValue();
+            getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true);
+            textView.setForeground(getContext().getDrawable(typedValue.resourceId));
+        }
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, dropDownItemTextSize);
         textView.setTextColor(ContextCompat.getColor(context, dropDownItemTextColor));
         textView.setGravity(Gravity.CENTER);
+        textView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onSelectionListener != null) onSelectionListener.onItemSelected(DropDownView.this, index);
+                collapse();
+            }
+        });
         return textView;
     }
 
@@ -226,4 +244,7 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
         return view;
     }
 
+    public void setOnSelectionListener(OnSelectionListener onSelectionListener) {
+        this.onSelectionListener = onSelectionListener;
+    }
 }
