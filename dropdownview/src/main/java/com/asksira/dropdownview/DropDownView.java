@@ -3,12 +3,15 @@ package com.asksira.dropdownview;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -155,36 +158,128 @@ public class DropDownView extends LinearLayout {
         backgroundDimView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                collapse();
+                collapse(true);
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && state == EXPANDED) {
+            collapse(true);
+            return true;
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
+    }
+
+    @Nullable
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Parcelable superState = super.onSaveInstanceState();
+        SavedState ss = new SavedState(superState);
+        ss.state = this.state;
+        ss.selectingPosition = this.selectingPosition;
+        ss.dropDownItems = this.dropDownItemList;
+        return ss;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        if (!(state instanceof SavedState)) {
+            super.onRestoreInstanceState(state);
+            return;
+        }
+        SavedState ss = (SavedState) state;
+        super.onRestoreInstanceState(ss.getSuperState());
+
+        this.state = ss.state;
+        this.selectingPosition = ss.selectingPosition;
+        this.dropDownItemList = ss.dropDownItems;
+
+        updateDropDownItems();
+        if (selectingPosition >= 0) setSelectingPosition(this.selectingPosition);
+        if (this.state == EXPANDED) {
+            setFocusableInTouchMode(true);
+            requestFocus();
+            updateDropDownItems();
+            filterArrow.setRotation(180);
+            backgroundDimView.setVisibility(VISIBLE);
+            FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) dropDownContainer.getLayoutParams();
+            lp.height = WRAP_CONTENT;
+            dropDownContainer.setLayoutParams(lp);
+        }
+    }
+
+    static class SavedState extends BaseSavedState {
+        int state;
+        int selectingPosition;
+        List<String> dropDownItems;
+
+        SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        private SavedState(Parcel in) {
+            super(in);
+            this.state = in.readInt();
+            this.selectingPosition = in.readInt();
+            in.readStringList(this.dropDownItems);
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeInt(this.state);
+            out.writeInt(this.selectingPosition);
+            out.writeStringList(this.dropDownItems);
+        }
+
+        //required field that makes Parcelables from a Parcel
+        public static final Parcelable.Creator<SavedState> CREATOR =
+                new Parcelable.Creator<SavedState>() {
+                    public SavedState createFromParcel(Parcel in) {
+                        return new SavedState(in);
+                    }
+                    public SavedState[] newArray(int size) {
+                        return new SavedState[size];
+                    }
+                };
     }
 
     public void toggle() {
         switch (state) {
             case COLLAPSED:
-                expand();
+                expand(true);
                 break;
             case EXPANDED:
-                collapse();
+                collapse(true);
                 break;
             default:
                 throw new IllegalStateException("This should not happen. If you see this, please submit an issue to Github");
         }
     }
 
-    public void expand () {
+    public void expand (boolean animate) {
         if (state == EXPANDED) return;
+        setFocusableInTouchMode(true);
+        requestFocus();
         updateDropDownItems();
         if (isArrowRotate) {
-            filterArrow.setRotation(0);
-            filterArrow.animate().rotationBy(-180).setDuration(animationDuration).start();
+            if (animate) {
+                filterArrow.setRotation(0);
+                filterArrow.animate().rotationBy(-180).setDuration(animationDuration).start();
+            } else {
+                filterArrow.setRotation(-180);
+            }
         }
-        TransitionSet transitionSet = new TransitionSet();
-        transitionSet.addTransition(new ChangeBounds());
-        transitionSet.addTransition(new Fade());
-        transitionSet.setDuration(animationDuration);
-        TransitionManager.beginDelayedTransition(this, transitionSet);
+        if (animate) {
+            TransitionSet transitionSet = new TransitionSet();
+            transitionSet.addTransition(new ChangeBounds());
+            transitionSet.addTransition(new Fade());
+            transitionSet.setDuration(animationDuration);
+            TransitionManager.beginDelayedTransition(this, transitionSet);
+        }
         backgroundDimView.setVisibility(VISIBLE);
         FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) dropDownContainer.getLayoutParams();
         lp.height = WRAP_CONTENT;
@@ -192,18 +287,24 @@ public class DropDownView extends LinearLayout {
         state = EXPANDED;
     }
 
-    public void collapse () {
+    public void collapse (boolean animate) {
         if (state == COLLAPSED) return;
         if (isArrowRotate) {
-            filterArrow.setRotation(180);
-            filterArrow.animate().rotationBy(180).setDuration(animationDuration).start();
+            if (animate) {
+                filterArrow.setRotation(180);
+                filterArrow.animate().rotationBy(180).setDuration(animationDuration).start();
+            } else {
+                filterArrow.setRotation(0);
+            }
         }
-        TransitionSet transitionSet = new TransitionSet();
-        transitionSet.addTransition(new ChangeBounds());
-        transitionSet.addTransition(new Fade());
-        transitionSet.setDuration(animationDuration);
-        transitionSet.excludeTarget(filterTextView, true);
-        TransitionManager.beginDelayedTransition(this, transitionSet);
+        if (animate) {
+            TransitionSet transitionSet = new TransitionSet();
+            transitionSet.addTransition(new ChangeBounds());
+            transitionSet.addTransition(new Fade());
+            transitionSet.setDuration(animationDuration);
+            transitionSet.excludeTarget(filterTextView, true);
+            TransitionManager.beginDelayedTransition(this, transitionSet);
+        }
         backgroundDimView.setVisibility(INVISIBLE);
         FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) dropDownContainer.getLayoutParams();
         lp.height = 0;
@@ -302,7 +403,7 @@ public class DropDownView extends LinearLayout {
         this.selectingPosition = selectingPosition;
         filterTextView.setText(dropDownItemList.get(selectingPosition));
         if (onSelectionListener != null) onSelectionListener.onItemSelected(DropDownView.this, selectingPosition);
-        collapse();
+        collapse(true);
     }
 
 
