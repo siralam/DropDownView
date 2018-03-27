@@ -46,6 +46,8 @@ public class DropDownView extends LinearLayout {
     private float textSize;
     private int filterTextColor;
     private int filterBarBackgroundColor;
+    private float arrowWidth;
+    private float arrowHeight;
     private int arrowDrawableResId;
     private boolean isArrowRotate;
     private float dividerHeight;
@@ -91,6 +93,8 @@ public class DropDownView extends LinearLayout {
             textSize = a.getDimension(R.styleable.DropDownView_filter_text_size, getResources().getDimension(R.dimen.filter_text_selected_default_size));
             filterTextColor = a.getResourceId(R.styleable.DropDownView_filter_text_color, R.color.dropdown_default_text_color);
             filterBarBackgroundColor = a.getResourceId(R.styleable.DropDownView_filter_bar_background_color, android.R.color.transparent);
+            arrowWidth = a.getDimension(R.styleable.DropDownView_arrow_width, -1);
+            arrowHeight = a.getDimension(R.styleable.DropDownView_arrow_height, -1);
             arrowDrawableResId = a.getResourceId(R.styleable.DropDownView_arrow_drawable, 0);
             isArrowRotate = a.getBoolean(R.styleable.DropDownView_arrow_rotate, true);
             dividerHeight = a.getDimension(R.styleable.DropDownView_divider_height, getResources().getDimension(R.dimen.filter_divider_default_height));
@@ -127,10 +131,19 @@ public class DropDownView extends LinearLayout {
         dropDownItemsContainer = findViewById(R.id.ll_dropdown_items_container);
         backgroundDimView = findViewById(R.id.background_dim);
 
+        //Configure filter bar
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) filterContainer.getLayoutParams();
         lp.height = (int)filterHeight;
         filterContainer.setLayoutParams(lp);
+        filterContainer.setBackgroundColor(ContextCompat.getColor(context, filterBarBackgroundColor));
+        filterContainer.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggle();
+            }
+        });
 
+        //Configure filter text
         if (typeface != 0) filterTextView.setTypeface(ResourcesCompat.getFont(context, typeface));
         filterTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         filterTextView.setTextColor(ContextCompat.getColor(context, filterTextColor));
@@ -141,18 +154,18 @@ public class DropDownView extends LinearLayout {
             selectingPosition = 0;
         }
 
+        //Configure arrow
+        if (arrowWidth > -1 || arrowHeight > -1) {
+            LinearLayout.LayoutParams arrowLp = (LinearLayout.LayoutParams) filterArrow.getLayoutParams();
+            if (arrowHeight > -1) arrowLp.height = (int) arrowHeight;
+            if (arrowWidth > -1) arrowLp.width = (int) arrowWidth;
+            filterArrow.setLayoutParams(arrowLp);
+        }
         if (arrowDrawableResId != 0) {
             filterArrow.setImageResource(arrowDrawableResId);
         }
 
-        filterContainer.setBackgroundColor(ContextCompat.getColor(context, filterBarBackgroundColor));
-        filterContainer.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggle();
-            }
-        });
-
+        //Configure background dim
         backgroundDimView.setBackgroundColor(ContextCompat.getColor(context,
                 isExpandDimBackground ? R.color.dropdown_background_dim : android.R.color.transparent));
         backgroundDimView.setOnClickListener(new OnClickListener() {
