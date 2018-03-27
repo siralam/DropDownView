@@ -26,7 +26,7 @@ import java.util.List;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
-public class DropDownView extends LinearLayout implements View.OnClickListener{
+public class DropDownView extends LinearLayout {
 
     private Context context;
 
@@ -56,6 +56,7 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
     private boolean isExpandIncludeSelectedItem;
     private String placeholderText;
     private int typeface;
+    private int animationDuration;
 
     //Runtime Attributes
     /**
@@ -100,6 +101,7 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
             isExpandIncludeSelectedItem = a.getBoolean(R.styleable.DropDownView_expand_include_selected_item, true);
             placeholderText = a.getString(R.styleable.DropDownView_placeholder_text);
             typeface = a.getResourceId(R.styleable.DropDownView_dropdown_typeface, 0);
+            animationDuration = a.getInteger(R.styleable.DropDownView_dropdown_animation_duration, 300);
         } finally {
             a.recycle();
         }
@@ -141,7 +143,12 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
         }
 
         filterContainer.setBackgroundColor(ContextCompat.getColor(context, filterBarBackgroundColor));
-        filterContainer.setOnClickListener(this);
+        filterContainer.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggle();
+            }
+        });
 
         backgroundDimView.setBackgroundColor(ContextCompat.getColor(context,
                 isExpandDimBackground ? R.color.dropdown_background_dim : android.R.color.transparent));
@@ -151,11 +158,6 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
                 collapse();
             }
         });
-    }
-
-    @Override
-    public void onClick(View v) {
-        toggle();
     }
 
     public void toggle() {
@@ -176,12 +178,12 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
         updateDropDownItems();
         if (isArrowRotate) {
             filterArrow.setRotation(0);
-            filterArrow.animate().rotationBy(-180).setDuration(300).start();
+            filterArrow.animate().rotationBy(-180).setDuration(animationDuration).start();
         }
         TransitionSet transitionSet = new TransitionSet();
         transitionSet.addTransition(new ChangeBounds());
         transitionSet.addTransition(new Fade());
-        transitionSet.setDuration(300);
+        transitionSet.setDuration(animationDuration);
         TransitionManager.beginDelayedTransition(this, transitionSet);
         backgroundDimView.setVisibility(VISIBLE);
         FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) dropDownContainer.getLayoutParams();
@@ -194,12 +196,12 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
         if (state == COLLAPSED) return;
         if (isArrowRotate) {
             filterArrow.setRotation(180);
-            filterArrow.animate().rotationBy(180).setDuration(300).start();
+            filterArrow.animate().rotationBy(180).setDuration(animationDuration).start();
         }
         TransitionSet transitionSet = new TransitionSet();
         transitionSet.addTransition(new ChangeBounds());
         transitionSet.addTransition(new Fade());
-        transitionSet.setDuration(300);
+        transitionSet.setDuration(animationDuration);
         transitionSet.excludeTarget(filterTextView, true);
         TransitionManager.beginDelayedTransition(this, transitionSet);
         backgroundDimView.setVisibility(INVISIBLE);
@@ -262,6 +264,32 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
         return view;
     }
 
+
+    /**
+     * Below are views that opens get method to users.
+     */
+    public LinearLayout getFilterContainer() {
+        return filterContainer;
+    }
+
+    public TextView getFilterTextView() {
+        return filterTextView;
+    }
+
+    public ImageView getFilterArrow() {
+        return filterArrow;
+    }
+
+    public View getBackgroundDimView() {
+        return backgroundDimView;
+    }
+
+
+
+    /**
+     * Functional methods
+     */
+
     public void setOnSelectionListener(OnSelectionListener onSelectionListener) {
         this.onSelectionListener = onSelectionListener;
     }
@@ -277,9 +305,110 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
         collapse();
     }
 
-    public LinearLayout getFilterContainer() {
-        return filterContainer;
+
+
+
+    /**
+     * View configurations
+     */
+
+    public void setFilterHeight(float filterHeightPixels) {
+        this.filterHeight = filterHeightPixels;
+        invalidate();
     }
 
+    public void setTextSize(float textSizePixels) {
+        this.textSize = textSizePixels;
+        invalidate();
+    }
 
+    /**
+     * This method accepts a color value, do not pass in a color resource id.
+     */
+    public void setFilterTextColor(int filterTextColor) {
+        this.filterTextColor = filterTextColor;
+        invalidate();
+    }
+
+    /**
+     * This method accepts a color value, do not pass in a color resource id.
+     */
+    public void setFilterBarBackgroundColor(int filterBarBackgroundColor) {
+        this.filterBarBackgroundColor = filterBarBackgroundColor;
+        invalidate();
+    }
+
+    public void setArrowDrawableResId(int arrowDrawableResId) {
+        this.arrowDrawableResId = arrowDrawableResId;
+        invalidate();
+    }
+
+    public void setArrowRotate(boolean arrowRotate) {
+        isArrowRotate = arrowRotate;
+        filterArrow.setRotation(0);
+    }
+
+    public void setDividerHeight(float dividerHeightPixels) {
+        this.dividerHeight = dividerHeightPixels;
+        invalidate();
+    }
+
+    /**
+     * This method accepts a color value, do not pass in a color resource id.
+     */
+    public void setDividerColor(int dividerColor) {
+        this.dividerColor = dividerColor;
+        invalidate();
+    }
+
+    public void setDropDownItemHeight(float dropDownItemHeightPixels) {
+        this.dropDownItemHeight = dropDownItemHeightPixels;
+    }
+
+    public void setDropDownItemTextSize(float dropDownItemTextSizePixels) {
+        this.dropDownItemTextSize = dropDownItemTextSizePixels;
+    }
+
+    /**
+     * This method accepts a color value, do not pass in a color resource id.
+     */
+    public void setDropDownItemTextColor(int dropDownItemTextColor) {
+        this.dropDownItemTextColor = dropDownItemTextColor;
+    }
+
+    /**
+     * This method accepts a color value, do not pass in a color resource id.
+     */
+    public void setDropDownItemTextColorSelected(int dropDownItemTextColorSelected) {
+        this.dropDownItemTextColorSelected = dropDownItemTextColorSelected;
+    }
+
+    /**
+     * This method accepts a color value, do not pass in a color resource id.
+     */
+    public void setDropDownBackgroundColor(int dropDownBackgroundColor) {
+        this.dropDownBackgroundColor = dropDownBackgroundColor;
+    }
+
+    public void setExpandDimBackground(boolean expandDimBackground) {
+        isExpandDimBackground = expandDimBackground;
+    }
+
+    public void setExpandIncludeSelectedItem(boolean expandIncludeSelectedItem) {
+        isExpandIncludeSelectedItem = expandIncludeSelectedItem;
+    }
+
+    public void setPlaceholderText(String placeholderText) {
+        this.placeholderText = placeholderText;
+        invalidate();
+    }
+
+    public void setTypeface(int fontResourceId) {
+        this.typeface = fontResourceId;
+        invalidate();
+    }
+
+    public void setAnimationDuration(int ms) {
+        this.animationDuration = ms;
+    }
 }
