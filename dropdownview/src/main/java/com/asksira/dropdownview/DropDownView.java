@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -54,6 +55,7 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
     private boolean isExpandDimBackground;
     private boolean isExpandIncludeSelectedItem;
     private String placeholderText;
+    private int typeface;
 
     //Runtime Attributes
     /**
@@ -97,6 +99,7 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
             isExpandDimBackground = a.getBoolean(R.styleable.DropDownView_expand_dim_background, true);
             isExpandIncludeSelectedItem = a.getBoolean(R.styleable.DropDownView_expand_include_selected_item, true);
             placeholderText = a.getString(R.styleable.DropDownView_placeholder_text);
+            typeface = a.getResourceId(R.styleable.DropDownView_dropdown_typeface, 0);
         } finally {
             a.recycle();
         }
@@ -123,6 +126,7 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
         lp.height = (int)filterHeight;
         filterContainer.setLayoutParams(lp);
 
+        if (typeface != 0) filterTextView.setTypeface(ResourcesCompat.getFont(context, typeface));
         filterTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         filterTextView.setTextColor(ContextCompat.getColor(context, filterTextColor));
         if (placeholderText != null && !placeholderText.isEmpty()) {
@@ -226,6 +230,7 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(MATCH_PARENT, (int)dropDownItemHeight);
         textView.setLayoutParams(lp);
         textView.setText(itemName);
+        if (typeface != 0) textView.setTypeface(ResourcesCompat.getFont(context, typeface));
         textView.setBackgroundColor(ContextCompat.getColor(context, dropDownBackgroundColor));
         if (Build.VERSION.SDK_INT >= 23) {
             TypedValue typedValue = new TypedValue();
@@ -271,4 +276,10 @@ public class DropDownView extends LinearLayout implements View.OnClickListener{
         if (onSelectionListener != null) onSelectionListener.onItemSelected(DropDownView.this, selectingPosition);
         collapse();
     }
+
+    public LinearLayout getFilterContainer() {
+        return filterContainer;
+    }
+
+
 }
