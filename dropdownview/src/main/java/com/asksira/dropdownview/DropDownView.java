@@ -103,7 +103,7 @@ public class DropDownView extends LinearLayout {
             arrowDrawableResId = a.getResourceId(R.styleable.DropDownView_arrow_drawable, 0);
             isArrowRotate = a.getBoolean(R.styleable.DropDownView_arrow_rotate, true);
             dividerHeight = a.getDimension(R.styleable.DropDownView_divider_height, getResources().getDimension(R.dimen.filter_divider_default_height));
-            dividerColor = a.getResourceId(R.styleable.DropDownView_divider_color, R.color.dropdown_default_divider_coloir);
+            dividerColor = a.getResourceId(R.styleable.DropDownView_divider_color, R.color.dropdown_default_divider_color);
             dropDownItemHeight = a.getDimension(R.styleable.DropDownView_dropDownItem_height, getResources().getDimension(R.dimen.filter_dropDownItem_default_height));
             dropDownItemTextSize = a.getDimension(R.styleable.DropDownView_dropDownItem_text_size, getResources().getDimension(R.dimen.filter_text_default_size));
             dropDownItemTextSizeSelected = a.getDimension(R.styleable.DropDownView_dropDownItem_text_size_selected, getResources().getDimension(R.dimen.filter_text_default_size));
@@ -148,7 +148,7 @@ public class DropDownView extends LinearLayout {
         filterContainer.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggle();
+                toggle(true);
             }
         });
 
@@ -277,13 +277,13 @@ public class DropDownView extends LinearLayout {
                 };
     }
 
-    public void toggle() {
+    public void toggle(boolean animated) {
         switch (state) {
             case COLLAPSED:
-                expand(true);
+                expand(animated);
                 break;
             case EXPANDED:
-                collapse(true);
+                collapse(animated);
                 break;
             default:
                 throw new IllegalStateException("This should not happen. If you see this, please submit an issue to Github");
