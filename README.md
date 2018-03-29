@@ -25,7 +25,7 @@ allprojects {
 And then add the below to your app's build.gradle:  
 
 ```groovy
-    implementation 'com.asksira.android:dropdownview:0.9.1'
+    implementation 'com.asksira.android:dropdownview:0.9.2'
 ```
 
 ### Step 1: Create DropDownView in XML
