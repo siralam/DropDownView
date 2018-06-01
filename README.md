@@ -203,6 +203,10 @@ But be aware that you need to do the below things when you override:
 1. Drop down list must have the same width as filter bar.
 2. Supports only single selection. (May consider adding multiple selection in the future releases)
 
+## Known Issues
+
+1. If your have a lot of drop down items and `expansion_style="drawer"`(default), items are not scrollable. Looks like this is a limitation of Android framework itself where a `LinearLayout` in a `ScrollView` with `layout_gravity="bottom"` cannot be scollred. So I suggest you use `expansion_style="reveal"` if you have a lot of drop down items.
+
 ## Release notes
 
 v1.0.1
