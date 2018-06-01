@@ -1,15 +1,14 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 26
-
-
+    compileSdkVersion 27
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 26
-        versionCode 3
-        versionName "0.9.2"
+        targetSdkVersion 27
+        versionCode 4
+        versionName "0.9.3"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -26,8 +25,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
     compile 'com.andkulikov:transitionseverywhere:1.7.9'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 ext {
@@ -43,7 +43,7 @@ ext {
     siteUrl = 'https://github.com/siralam/DropDownView'
     gitUrl = 'https://github.com/siralam/DropDownView.git'
 
-    libraryVersion = '0.9.2'
+    libraryVersion = '0.9.3'
 
     developerId = 'siralam'
     developerName = 'Sira Lam'
@@ -57,3 +57,6 @@ ext {
 // Place it at the end of the file
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
+repositories {
+    mavenCentral()
+}
