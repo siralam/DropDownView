@@ -28,6 +28,10 @@ class DropDownView : LinearLayout {
     companion object {
         const val COLLAPSED = 1
         const val EXPANDED = 2
+
+        private const val CENTER_HORIZONTAL = 0
+        private const val START = 1
+        private const val END = 2
     }
 
     //Views
@@ -97,58 +101,22 @@ class DropDownView : LinearLayout {
     var isArrowRotate: Boolean = false
     @Px
     var dividerHeight: Float = 0.toFloat()
-        set(value) {
-            field = value
-            requestLayout()
-        }
     @ColorRes
     var dividerColor: Int = 0
-        set(value) {
-            field = value
-            invalidate()
-        }
     @Px
     var dropDownItemHeight: Float = 0.toFloat()
-        set(value) {
-            field = value
-            requestLayout()
-        }
     @Px
     var dropDownItemTextSize: Float = 0.toFloat()
-        set(value) {
-            field = value
-            requestLayout()
-        }
     @Px
     var dropDownItemTextSizeSelected: Float = 0.toFloat()
-        set(value) {
-            field = value
-            requestLayout()
-        }
     @ColorRes
     var dropDownItemTextColor: Int = 0
-        set(value) {
-            field = value
-            invalidate()
-        }
     @ColorRes
     var dropDownItemTextColorSelected: Int = 0
-        set(value) {
-            field = value
-            invalidate()
-        }
     @ColorRes
     var dropDownBackgroundColor: Int = 0
-        set(value) {
-            field = value
-            invalidate()
-        }
     @ColorRes
     var dropDownBackgroundColorSelected: Int = 0
-        set(value) {
-            field = value
-            invalidate()
-        }
     var isExpandDimBackground: Boolean = false
     @ColorRes
     var dimBackgroundColor: Int = 0
@@ -169,6 +137,13 @@ class DropDownView : LinearLayout {
             requestLayout()
         }
     var animationDuration: Int = 0
+    var dropdownItemGravity = CENTER_HORIZONTAL
+    @DrawableRes
+    var dropdownItemCompoundDrawable:Int = 0
+    @ColorRes
+    var bottomDecoratorColor: Int = 0
+    @Px
+    var bottomDecoratorHeight: Float = 0.toFloat()
 
     //Runtime Attributes
     /**
@@ -233,6 +208,10 @@ class DropDownView : LinearLayout {
             placeholderText = a.getString(R.styleable.DropDownView_placeholder_text)
             typeface = a.getResourceId(R.styleable.DropDownView_dropdown_typeface, 0)
             animationDuration = a.getInteger(R.styleable.DropDownView_dropdown_animation_duration, 300)
+            dropdownItemGravity = a.getInt(R.styleable.DropDownView_dropdownItem_text_gravity, CENTER_HORIZONTAL)
+            dropdownItemCompoundDrawable = a.getResourceId(R.styleable.DropDownView_dropdownItem_compound_drawable_selected, 0)
+            bottomDecoratorColor = a.getResourceId(R.styleable.DropDownView_bottom_decorator_color, android.R.color.transparent)
+            bottomDecoratorHeight = a.getDimension(R.styleable.DropDownView_bottom_decorator_height, 0.toFloat())
         } finally {
             a.recycle()
         }
@@ -442,6 +421,9 @@ class DropDownView : LinearLayout {
             dropDownItemsContainer.addView(generateDropDownItem(dropDownItemList[i], i))
             dropDownItemsContainer.addView(generateDivider())
         }
+        if (bottomDecoratorHeight > 0) {
+            dropDownItemsContainer.addView(generateBottomDecorator())
+        }
     }
 
     private fun generateDropDownItem(itemName: String, index: Int): TextView {
@@ -449,22 +431,31 @@ class DropDownView : LinearLayout {
         val lp = LinearLayout.LayoutParams(MATCH_PARENT, dropDownItemHeight.toInt())
         textView.layoutParams = lp
         textView.text = itemName
+        textView.setPadding(16.dp(), 0, 16.dp(), 0)
         if (typeface != 0) textView.typeface = ResourcesCompat.getFont(context!!, typeface)
         if (Build.VERSION.SDK_INT >= 23) {
             val typedValue = TypedValue()
-            getContext().theme.resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true)
-            textView.foreground = getContext().getDrawable(typedValue.resourceId)
+            context.theme.resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true)
+            textView.foreground = context.getDrawable(typedValue.resourceId)
         }
         if (index == selectingPosition) {
             textView.setBackgroundColor(ContextCompat.getColor(context!!, dropDownBackgroundColorSelected))
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, dropDownItemTextSizeSelected)
             textView.setTextColor(ContextCompat.getColor(context!!, dropDownItemTextColorSelected))
+            if (dropdownItemCompoundDrawable != 0) {
+                textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, dropdownItemCompoundDrawable, 0)
+            }
         } else {
             textView.setBackgroundColor(ContextCompat.getColor(context!!, dropDownBackgroundColor))
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, dropDownItemTextSize)
             textView.setTextColor(ContextCompat.getColor(context!!, dropDownItemTextColor))
         }
-        textView.gravity = Gravity.CENTER
+        textView.gravity = when (dropdownItemGravity) {
+            CENTER_HORIZONTAL -> Gravity.CENTER
+            START -> Gravity.START or Gravity.CENTER_VERTICAL
+            END -> Gravity.END or Gravity.CENTER_VERTICAL
+            else -> Gravity.CENTER
+        }
         textView.setOnClickListener { selectingPosition = index }
         return textView
     }
@@ -475,6 +466,15 @@ class DropDownView : LinearLayout {
                 MATCH_PARENT, dividerHeight.toInt())
         view.layoutParams = lp
         view.setBackgroundColor(ContextCompat.getColor(context!!, dividerColor))
+        return view
+    }
+
+    private fun generateBottomDecorator() : View {
+        val view = View(context)
+        val lp = LinearLayout.LayoutParams(
+                MATCH_PARENT, bottomDecoratorHeight.toInt())
+        view.layoutParams = lp
+        view.setBackgroundColor(ContextCompat.getColor(context!!, bottomDecoratorColor))
         return view
     }
 }

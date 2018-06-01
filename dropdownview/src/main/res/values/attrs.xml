@@ -26,6 +26,14 @@
         <attr name="placeholder_text" format="string"/>
         <attr name="dropdown_typeface" format="reference"/>
         <attr name="dropdown_animation_duration" format="integer"/>
+        <attr name="dropdownItem_text_gravity" format="enum">
+            <enum name="center_horizontal" value="0"/>
+            <enum name="start" value="1"/>
+            <enum name="end" value="2"/>
+        </attr>
+        <attr name="dropdownItem_compound_drawable_selected" format="reference"/>
+        <attr name="bottom_decorator_height" format="dimension"/>
+        <attr name="bottom_decorator_color" format="reference"/>
     </declare-styleable>
 
 
