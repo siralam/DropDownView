@@ -25,7 +25,7 @@ allprojects {
 And then add the below to your app's build.gradle:  
 
 ```groovy
-    implementation 'com.asksira.android:dropdownview:0.9.2'
+    implementation 'com.asksira.android:dropdownview:1.0.0'
 ```
 
 ### Step 1: Create DropDownView in XML
@@ -36,13 +36,19 @@ And then add the below to your app's build.gradle:
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:placeholder_text="Please select"
+        app:dropdownItem_text_gravity="start"
+        app:dropdownItem_compound_drawable_selected="@drawable/ic_done_black_24dp"
         app:filter_bar_background_color="@android:color/holo_orange_dark"
         app:filter_text_color="@android:color/white"
         app:arrow_drawable="@drawable/expand_arrow"
         app:arrow_width="24dp"
         app:dropDownItem_text_color_selected="@android:color/holo_orange_dark"
         app:divider_color="@android:color/holo_orange_light"
-        app:dropDownItem_text_size_selected="18sp" />
+        app:dropDownItem_text_size_selected="18sp"
+        app:bottom_decorator_color="@android:color/holo_orange_dark"
+        app:bottom_decorator_height="4dp"
+        app:expansion_style="drawer"
+        app:last_item_has_divider="false"/>
 ```
 
 **IMPORTANT**:  
@@ -77,6 +83,14 @@ Note that the opened drop down list is scrollable, so you don't need to worry ev
 | placeholder_text                       | String      | N/A   | Empty               |                                                                |
 | dropdown_typeface                      | Resource ID | N/A   | Default system font | More information below                                         |
 | dropdown_animation_duration            | int         | ms    | 300                 |                                                                |
+| dropdownItem_text_gravity              | enum        | N/A   | center_horizontal   | center_horizontal / start / end                                |
+| dropdownItem_compound_drawable_selected| Resource ID | N/A   | null                | An image that is displayed at the end of the dropdown item.    |
+| top_decorator_height                   | Dimension   | dp    | 0                   |                                                                |
+| top_decorator_color                    | Resource ID | N/A   | Transparent         |                                                                |
+| bottom_decorator_height                | Dimension   | dp    | 0                   |                                                                |
+| bottom_decorator_color                 | Resource ID | N/A   | Transparent         |                                                                |
+| expansion_style                        | enum        | N/A   | drawer              | drawer / reveal                                                |
+| last_item_has_divider                  | boolean     | N/A   | true                |                                                                |
 
 For the typeface (font), you must use the [Official font resource published together with support library v26](https://developer.android.com/guide/topics/ui/look-and-feel/fonts-in-xml.html). i.e. the xml should be something like `app:dropdown_typeface="@font/my_own_typeface"`
 
@@ -161,19 +175,45 @@ That's it!
     dropDownView.setDropDownItemTextSizeSelected(float px);
     dropDownView.setDropDownBackgroundColorSelected(int colorResourceID);
     dropDownView.setDimBackgroundColor(int colorResourceID);
+    dropDownView.setDropdownItemGravity(int gravity);
+    dropDownView.setDropdownItemCompoundDrawable(int drawableResId);
+    dropDownView.setTopDecoratorColor(int colorResourceID);
+    dropDownView.setTopDecoratorHeight(float px);
+    dropDownView.setBottomDecoratorColor(int colorResourceID);
+    dropDownView.setBottomDecoratorHeight(float px);
+    dropDownView.setExpansionStyle(DropDownView.REVEAL);
+    dropDownView.setLastItemHasDivider(false);
 ```
 
 ### Tips
 
 - In case you don't want to show an arrow, just set `filter_text_arrow_padding` and `arrow_width` both to 0dp.
 
+### Customize your own DropDownItems
+
+You can extends DropDownView and override `View generateDropDownItem(String itemName, int index)` to provide your implementation. It works as long as you return a View.  
+But be aware that you need to do the below things when you override:
+
+1. Do not call super.generateDropDownItem (Ya of coz)
+2. Your view should have `LayoutParams` as `new LinearLayout.LayoutParams(MATCH_PARENT, theHeightYouWishToHaveInPixel)`
+3. You should set onClickListener by yourself. To be exact, call `setSelectingPosition(index)` in the `OnClickListener`.
+
 ## Limitations
 
-1. Your selectable items must be represented by a `String` (i.e. `setDropDownListItem()` accepts `List<String>` only). This library does not support using images or View combinations as selectable item. With that said, it is also easy for your to modify my library to achieve this. Specifically, try to modify `private TextView generateDropDownItem (String itemName, final int index) {...}` and return a custom `View`.
-2. Drop down list must have the same width as filter bar.
-3. Supports only single selection. (May consider adding multiple selection in the future releases)
+1. Drop down list must have the same width as filter bar.
+2. Supports only single selection. (May consider adding multiple selection in the future releases)
 
 ## Release notes
+
+v1.0.0
+1. Converted to Kotlin.
+2. Solved Issue #2.
+3. Added Top and Bottom Decorator.
+4. Allow configuration of drop down items' gravity.
+5. Allow configuration of selected item's compound drawable.
+6. Allow configuration of expansion style.
+7. Allow configuration of last item has divider or not.
+8. Allow overriding `View generateDropDownItem(String itemName, int index)` to customize drop down items.
 
 v0.9.1  
 First Release.
