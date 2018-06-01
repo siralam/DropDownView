@@ -27,9 +27,8 @@
         app:dropDownItem_text_size_selected="18sp"
         app:bottom_decorator_color="@android:color/holo_orange_dark"
         app:bottom_decorator_height="4dp"
-        app:top_decorator_height="2dp"
-        app:top_decorator_color="@color/colorAccent"
-        app:expansion_style="drawer"/>
+        app:expansion_style="drawer"
+        app:last_item_has_divider="false"/>
 
 
 </RelativeLayout>

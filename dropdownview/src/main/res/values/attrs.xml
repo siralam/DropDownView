@@ -40,6 +40,7 @@
             <enum name="reveal" value="0"/>
             <enum name="drawer" value="1"/>
         </attr>
+        <attr name="last_item_has_divider" format="boolean"/>
     </declare-styleable>
 
 

@@ -166,6 +166,7 @@ class DropDownView : LinearLayout {
                 Gravity.BOTTOM
             }
         }
+    var isLastItemHasDivider = true
 
     //Runtime Attributes
     /**
@@ -237,6 +238,7 @@ class DropDownView : LinearLayout {
             bottomDecoratorColor = a.getResourceId(R.styleable.DropDownView_bottom_decorator_color, android.R.color.transparent)
             bottomDecoratorHeight = a.getDimension(R.styleable.DropDownView_bottom_decorator_height, 0.toFloat())
             _expansionStyle = a.getInt(R.styleable.DropDownView_expansion_style, DRAWER)
+            isLastItemHasDivider = a.getBoolean(R.styleable.DropDownView_last_item_has_divider, true)
         } finally {
             a.recycle()
         }
@@ -450,7 +452,11 @@ class DropDownView : LinearLayout {
                 if (i == selectingPosition) continue
             }
             dropDownItemsContainer.addView(generateDropDownItem(dropDownItemList[i], i))
-            dropDownItemsContainer.addView(generateDivider())
+            if (i == dropDownItemList.size - 1) {
+                if (isLastItemHasDivider) dropDownItemsContainer.addView(generateDivider())
+            } else {
+                dropDownItemsContainer.addView(generateDivider())
+            }
         }
         if (bottomDecoratorHeight > 0) {
             dropDownItemsContainer.addView(generateBottomDecorator())
