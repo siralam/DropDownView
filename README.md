@@ -25,7 +25,7 @@ allprojects {
 And then add the below to your app's build.gradle:  
 
 ```groovy
-    implementation 'com.asksira.android:dropdownview:1.0.0'
+    implementation 'com.asksira.android:dropdownview:1.0.1'
 ```
 
 ### Step 1: Create DropDownView in XML
@@ -205,7 +205,7 @@ But be aware that you need to do the below things when you override:
 
 ## Release notes
 
-v1.0.0
+v1.0.1
 1. Converted to Kotlin.
 2. Solved Issue #2.
 3. Added Top and Bottom Decorator.
