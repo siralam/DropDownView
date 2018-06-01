@@ -32,6 +32,9 @@ class DropDownView : LinearLayout {
         private const val CENTER_HORIZONTAL = 0
         private const val START = 1
         private const val END = 2
+
+        private const val REVEAL = 0
+        private const val DRAWER = 1
     }
 
     //Views
@@ -141,9 +144,28 @@ class DropDownView : LinearLayout {
     @DrawableRes
     var dropdownItemCompoundDrawable:Int = 0
     @ColorRes
+    var topDecoratorColor: Int = 0
+    @Px
+    var topDecoratorHeight: Float = 0.toFloat()
+    @ColorRes
     var bottomDecoratorColor: Int = 0
     @Px
     var bottomDecoratorHeight: Float = 0.toFloat()
+    private var _expansionStyle: Int = DRAWER
+    var expansionStyle: Int = DRAWER
+        get() = _expansionStyle
+        set(value) {
+            if (value != REVEAL && value != DRAWER) throw IllegalArgumentException("Unexpected expansionStyle." +
+                    " It should be either REVEAL(0) or DRAWER(1).")
+            field = value
+            _expansionStyle = value
+            val lp = dropDownItemsContainer.layoutParams as FrameLayout.LayoutParams
+            lp.gravity = if (value == REVEAL) {
+                Gravity.TOP
+            } else {
+                Gravity.BOTTOM
+            }
+        }
 
     //Runtime Attributes
     /**
@@ -210,8 +232,11 @@ class DropDownView : LinearLayout {
             animationDuration = a.getInteger(R.styleable.DropDownView_dropdown_animation_duration, 300)
             dropdownItemGravity = a.getInt(R.styleable.DropDownView_dropdownItem_text_gravity, CENTER_HORIZONTAL)
             dropdownItemCompoundDrawable = a.getResourceId(R.styleable.DropDownView_dropdownItem_compound_drawable_selected, 0)
+            topDecoratorColor = a.getResourceId(R.styleable.DropDownView_top_decorator_color, android.R.color.transparent)
+            topDecoratorHeight = a.getDimension(R.styleable.DropDownView_top_decorator_height, 0.toFloat())
             bottomDecoratorColor = a.getResourceId(R.styleable.DropDownView_bottom_decorator_color, android.R.color.transparent)
             bottomDecoratorHeight = a.getDimension(R.styleable.DropDownView_bottom_decorator_height, 0.toFloat())
+            _expansionStyle = a.getInt(R.styleable.DropDownView_expansion_style, DRAWER)
         } finally {
             a.recycle()
         }
@@ -264,6 +289,9 @@ class DropDownView : LinearLayout {
         backgroundDimView.setBackgroundColor(ContextCompat.getColor(context,
                 if (isExpandDimBackground) dimBackgroundColor else android.R.color.transparent))
         backgroundDimView.setOnClickListener { collapse(true) }
+
+        //Configure expansion style
+        expansionStyle = _expansionStyle
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
@@ -414,6 +442,9 @@ class DropDownView : LinearLayout {
 
     private fun updateDropDownItems() {
         dropDownItemsContainer.removeAllViews()
+        if (topDecoratorHeight > 0) {
+            dropDownItemsContainer.addView(generateTopDecorator())
+        }
         for (i in dropDownItemList.indices) {
             if (!isExpandIncludeSelectedItem) {
                 if (i == selectingPosition) continue
@@ -466,6 +497,15 @@ class DropDownView : LinearLayout {
                 MATCH_PARENT, dividerHeight.toInt())
         view.layoutParams = lp
         view.setBackgroundColor(ContextCompat.getColor(context!!, dividerColor))
+        return view
+    }
+
+    private fun generateTopDecorator() : View {
+        val view = View(context)
+        val lp = LinearLayout.LayoutParams(
+                MATCH_PARENT, topDecoratorHeight.toInt())
+        view.layoutParams = lp
+        view.setBackgroundColor(ContextCompat.getColor(context!!, topDecoratorColor))
         return view
     }
 

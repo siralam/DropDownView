@@ -32,8 +32,14 @@
             <enum name="end" value="2"/>
         </attr>
         <attr name="dropdownItem_compound_drawable_selected" format="reference"/>
+        <attr name="top_decorator_height" format="dimension"/>
+        <attr name="top_decorator_color" format="reference"/>
         <attr name="bottom_decorator_height" format="dimension"/>
         <attr name="bottom_decorator_color" format="reference"/>
+        <attr name="expansion_style" format="enum">
+            <enum name="reveal" value="0"/>
+            <enum name="drawer" value="1"/>
+        </attr>
     </declare-styleable>
 
 
