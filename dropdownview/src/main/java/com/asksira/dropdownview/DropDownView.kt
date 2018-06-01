@@ -29,12 +29,11 @@ class DropDownView : LinearLayout {
         const val COLLAPSED = 1
         const val EXPANDED = 2
 
-        private const val CENTER_HORIZONTAL = 0
+        const val REVEAL = 0
+        const val DRAWER = 1
+
         private const val START = 1
         private const val END = 2
-
-        private const val REVEAL = 0
-        private const val DRAWER = 1
     }
 
     //Views
@@ -140,7 +139,15 @@ class DropDownView : LinearLayout {
             requestLayout()
         }
     var animationDuration: Int = 0
-    var dropdownItemGravity = CENTER_HORIZONTAL
+    var dropdownItemGravity = Gravity.CENTER
+        set(value) {
+            field = when (value) {
+                Gravity.CENTER_HORIZONTAL, Gravity.CENTER -> Gravity.CENTER
+                Gravity.LEFT, Gravity.START -> Gravity.START or Gravity.CENTER_VERTICAL
+                Gravity.RIGHT, Gravity.END -> Gravity.END or Gravity.CENTER_VERTICAL
+                else -> Gravity.CENTER
+            }
+        }
     @DrawableRes
     var dropdownItemCompoundDrawable:Int = 0
     @ColorRes
@@ -231,7 +238,11 @@ class DropDownView : LinearLayout {
             placeholderText = a.getString(R.styleable.DropDownView_placeholder_text)
             typeface = a.getResourceId(R.styleable.DropDownView_dropdown_typeface, 0)
             animationDuration = a.getInteger(R.styleable.DropDownView_dropdown_animation_duration, 300)
-            dropdownItemGravity = a.getInt(R.styleable.DropDownView_dropdownItem_text_gravity, CENTER_HORIZONTAL)
+            dropdownItemGravity = when (a.getInt(R.styleable.DropDownView_dropdownItem_text_gravity, Gravity.CENTER)) {
+                START -> Gravity.START
+                END -> Gravity.END
+                else  -> Gravity.CENTER
+            }
             dropdownItemCompoundDrawable = a.getResourceId(R.styleable.DropDownView_dropdownItem_compound_drawable_selected, 0)
             topDecoratorColor = a.getResourceId(R.styleable.DropDownView_top_decorator_color, android.R.color.transparent)
             topDecoratorHeight = a.getDimension(R.styleable.DropDownView_top_decorator_height, 0.toFloat())
@@ -487,12 +498,7 @@ class DropDownView : LinearLayout {
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, dropDownItemTextSize)
             textView.setTextColor(ContextCompat.getColor(context!!, dropDownItemTextColor))
         }
-        textView.gravity = when (dropdownItemGravity) {
-            CENTER_HORIZONTAL -> Gravity.CENTER
-            START -> Gravity.START or Gravity.CENTER_VERTICAL
-            END -> Gravity.END or Gravity.CENTER_VERTICAL
-            else -> Gravity.CENTER
-        }
+        textView.gravity = dropdownItemGravity
         textView.setOnClickListener { selectingPosition = index }
         return textView
     }
