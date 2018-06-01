@@ -23,7 +23,7 @@ import com.transitionseverywhere.Fade
 import com.transitionseverywhere.TransitionManager
 import com.transitionseverywhere.TransitionSet
 
-class DropDownView : LinearLayout {
+open class DropDownView : LinearLayout {
 
     companion object {
         const val COLLAPSED = 1
@@ -474,7 +474,7 @@ class DropDownView : LinearLayout {
         }
     }
 
-    private fun generateDropDownItem(itemName: String, index: Int): TextView {
+    protected open fun generateDropDownItem(itemName: String, index: Int): View {
         val textView = TextView(context)
         val lp = LinearLayout.LayoutParams(MATCH_PARENT, dropDownItemHeight.toInt())
         textView.layoutParams = lp
