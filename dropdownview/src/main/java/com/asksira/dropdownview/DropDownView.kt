@@ -188,12 +188,12 @@ open class DropDownView : LinearLayout {
             field = value
             _selectingPosition = value
             filterTextView.text = dropDownItemList[selectingPosition]
-            onSelectionListener.invoke(this@DropDownView, selectingPosition)
+            onSelectionListener?.onItemSelected(this@DropDownView, selectingPosition)
             collapse(true)
         }
     var state = COLLAPSED
     var dropDownItemList: List<String> = ArrayList()
-    var onSelectionListener: (view: View, position: Int) -> Unit = {_, _ -> }
+    var onSelectionListener: OnDropDownSelectionListener? = null
 
     constructor(context: Context) : super(context) {
         init(context)
@@ -335,7 +335,7 @@ open class DropDownView : LinearLayout {
         updateDropDownItems()
         if (selectingPosition >= 0) {
             filterTextView.text = dropDownItemList[selectingPosition]
-            onSelectionListener.invoke(this@DropDownView, selectingPosition)
+            onSelectionListener?.onItemSelected(this@DropDownView, selectingPosition)
         }
         if (this.state == EXPANDED) {
             isFocusableInTouchMode = true

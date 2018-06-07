@@ -23,8 +23,8 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
-    implementation 'com.asksira.android:dropdownview:1.0.0'
-//    implementation project(':dropdownview')
+//    implementation 'com.asksira.android:dropdownview:1.0.1'
+    implementation project(':dropdownview')
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 repositories {

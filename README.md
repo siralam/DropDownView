@@ -25,7 +25,7 @@ allprojects {
 And then add the below to your app's build.gradle:  
 
 ```groovy
-    implementation 'com.asksira.android:dropdownview:1.0.1'
+    implementation 'com.asksira.android:dropdownview:1.0.2'
 ```
 
 ### Step 1: Create DropDownView in XML
@@ -112,14 +112,21 @@ public class MainActivity extends AppCompatActivity {
         dropDownView = findViewById(R.id.dropdownview);
 
         dropDownView.setDropDownListItem(yourFilterList);
-        dropDownView.setOnSelectionListener(new DropDownView.OnSelectionListener() {
+        dropDownView.setOnSelectionListener(new OnDropDownSelectionListener() {
             @Override
-            dropDownView.onItemSelected(DropDownView view, int position) {
+            public void onItemSelected(DropDownView view, int position) {
                 //Do something with the selected position
             }
         });
     }
 }
+```
+
+If you are using Kotlin, `setOnSelectionListener` should be like this:
+```kotlin
+        dropDownView.onSelectionListener = OnDropDownSelectionListener { view, position ->
+            //...
+        }
 ```
 
 That's it!
@@ -208,6 +215,9 @@ But be aware that you need to do the below things when you override:
 1. If your have a lot of drop down items and `expansion_style="drawer"`(default), items are not scrollable. Looks like this is a limitation of Android framework itself where a `LinearLayout` in a `ScrollView` with `layout_gravity="bottom"` cannot be scollred. So I suggest you use `expansion_style="reveal"` if you have a lot of drop down items.
 
 ## Release notes
+
+v1.0.2
+1. Fixed Issue #3.
 
 v1.0.1
 1. Converted to Kotlin.

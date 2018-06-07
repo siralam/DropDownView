@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.asksira.dropdownview.DropDownView;
+import com.asksira.dropdownview.OnDropDownSelectionListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         dropDownView.setDropDownListItem(generateFilterList());
-        dropDownView.setOnSelectionListener(new DropDownView.OnSelectionListener() {
+        dropDownView.setOnSelectionListener(new OnDropDownSelectionListener() {
             @Override
             public void onItemSelected(DropDownView view, int position) {
                 switch (position) {
