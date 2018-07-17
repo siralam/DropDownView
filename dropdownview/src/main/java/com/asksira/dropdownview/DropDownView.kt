@@ -46,10 +46,10 @@ open class DropDownView : LinearLayout {
         private set
     lateinit var filterArrow: ImageView
         private set
-    private lateinit var dropDownContainer: ScrollView
-    private lateinit var dropDownItemsContainer: LinearLayout
-    private lateinit var filterPadding: View
-    private lateinit var backgroundDimView: View
+    lateinit var dropDownContainer: ScrollView
+    lateinit var dropDownItemsContainer: LinearLayout
+    lateinit var filterPadding: View
+    lateinit var backgroundDimView: View
 
     //Configurable Attributes
     @Px
