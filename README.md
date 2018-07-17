@@ -25,7 +25,7 @@ allprojects {
 And then add the below to your app's build.gradle:  
 
 ```groovy
-    implementation 'com.asksira.android:dropdownview:1.0.2'
+    implementation 'com.asksira.android:dropdownview:1.0.3'
 ```
 
 ### Step 1: Create DropDownView in XML
@@ -215,6 +215,9 @@ But be aware that you need to do the below things when you override:
 1. If your have a lot of drop down items and `expansion_style="drawer"`(default), items are not scrollable. Looks like this is a limitation of Android framework itself where a `LinearLayout` in a `ScrollView` with `layout_gravity="bottom"` cannot be scollred. So I suggest you use `expansion_style="reveal"` if you have a lot of drop down items.
 
 ## Release notes
+
+v1.0.3
+1. Exposed some more views.
 
 v1.0.2
 1. Fixed Issue #3.
