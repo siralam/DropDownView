@@ -4,12 +4,6 @@ import android.content.Context
 import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
-import android.support.annotation.ColorRes
-import android.support.annotation.DrawableRes
-import android.support.annotation.FontRes
-import android.support.annotation.Px
-import android.support.v4.content.ContextCompat
-import android.support.v4.content.res.ResourcesCompat
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
@@ -18,10 +12,16 @@ import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.*
-import com.transitionseverywhere.ChangeBounds
-import com.transitionseverywhere.Fade
-import com.transitionseverywhere.TransitionManager
-import com.transitionseverywhere.TransitionSet
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.FontRes
+import androidx.annotation.Px
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.transition.ChangeBounds
+import androidx.transition.Fade
+import androidx.transition.TransitionManager
+import androidx.transition.TransitionSet
 
 open class DropDownView : LinearLayout {
 
@@ -358,12 +358,12 @@ open class DropDownView : LinearLayout {
         }
     }
 
-    internal class SavedState : View.BaseSavedState {
+    internal class SavedState : BaseSavedState {
         var state: Int = 0
         var selectingPosition: Int = 0
         var dropDownItems: List<String> = ArrayList()
 
-        constructor(superState: Parcelable) : super(superState)
+        constructor(superState: Parcelable?) : super(superState)
 
         constructor(source: Parcel) : super(source) {
             this.state = source.readInt()

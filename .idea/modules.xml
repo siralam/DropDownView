@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/DropDownView.iml" filepath="$PROJECT_DIR$/DropDownView.iml" group="DropDownView" />
+      <module fileurl="file://$PROJECT_DIR$/app/DropDownView-app.iml" filepath="$PROJECT_DIR$/app/DropDownView-app.iml" group="DropDownView/app" />
+      <module fileurl="file://$PROJECT_DIR$/dropdownview/DropDownView-dropdownview.iml" filepath="$PROJECT_DIR$/dropdownview/DropDownView-dropdownview.iml" group="DropDownView/dropdownview" />
       <module fileurl="file://$PROJECT_DIR$/DropDownViewDemo.iml" filepath="$PROJECT_DIR$/DropDownViewDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/dropdownview/dropdownview.iml" filepath="$PROJECT_DIR$/dropdownview/dropdownview.iml" />
