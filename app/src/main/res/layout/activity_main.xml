@@ -28,7 +28,8 @@
         app:bottom_decorator_color="@android:color/holo_orange_dark"
         app:bottom_decorator_height="4dp"
         app:expansion_style="drawer"
-        app:last_item_has_divider="false"/>
+        app:last_item_has_divider="false"
+        app:arrow_align_end="false" />
 
 
 </RelativeLayout>

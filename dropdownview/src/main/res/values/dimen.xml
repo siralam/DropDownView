@@ -6,6 +6,6 @@
     <dimen name="filter_divider_default_height">1dp</dimen>
     <dimen name="filter_text_selected_default_size">18sp</dimen>
     <dimen name="filter_text_default_size">16sp</dimen>
-    <dimen name="filter_text_arrow_default_padding">8dp</dimen>
+    <dimen name="arrow_default_start_margin">8dp</dimen>
 
 </resources>

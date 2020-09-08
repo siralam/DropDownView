@@ -40,7 +40,7 @@ open class DropDownView : LinearLayout {
     /**
      * Below are views that opens get method to users.
      */
-    lateinit var filterContainer: LinearLayout
+    lateinit var filterContainer: RelativeLayout
         private set
     lateinit var filterTextView: TextView
         private set
@@ -48,7 +48,6 @@ open class DropDownView : LinearLayout {
         private set
     lateinit var dropDownContainer: ScrollView
     lateinit var dropDownItemsContainer: LinearLayout
-    lateinit var filterPadding: View
     lateinit var backgroundDimView: View
 
     //Configurable Attributes
@@ -77,7 +76,13 @@ open class DropDownView : LinearLayout {
             invalidate()
         }
     @Px
-    var filterTextArrowPadding: Float = 0.toFloat()
+    var arrowStartMargin: Float = 0.toFloat()
+        set(value) {
+            field = value
+            requestLayout()
+        }
+    @Px
+    var arrowEndMargin: Float = 0.toFloat()
         set(value) {
             field = value
             requestLayout()
@@ -174,6 +179,7 @@ open class DropDownView : LinearLayout {
             }
         }
     var isLastItemHasDivider = true
+    var isArrowAlignEnd = false
 
     //Runtime Attributes
     /**
@@ -214,7 +220,8 @@ open class DropDownView : LinearLayout {
             textSize = a.getDimension(R.styleable.DropDownView_filter_text_size, resources.getDimension(R.dimen.filter_text_selected_default_size))
             filterTextColor = a.getResourceId(R.styleable.DropDownView_filter_text_color, R.color.dropdown_default_text_color)
             filterBarBackgroundColor = a.getResourceId(R.styleable.DropDownView_filter_bar_background_color, android.R.color.transparent)
-            filterTextArrowPadding = a.getDimension(R.styleable.DropDownView_filter_text_arrow_padding, resources.getDimension(R.dimen.filter_text_arrow_default_padding))
+            arrowStartMargin = a.getDimension(R.styleable.DropDownView_arrow_start_margin, resources.getDimension(R.dimen.arrow_default_start_margin))
+            arrowEndMargin = a.getDimension(R.styleable.DropDownView_arrow_end_margin, 0f)
             arrowWidth = a.getDimension(R.styleable.DropDownView_arrow_width, -1f)
             arrowHeight = a.getDimension(R.styleable.DropDownView_arrow_height, -1f)
             arrowDrawableResId = a.getResourceId(R.styleable.DropDownView_arrow_drawable, 0)
@@ -246,11 +253,12 @@ open class DropDownView : LinearLayout {
             bottomDecoratorHeight = a.getDimension(R.styleable.DropDownView_bottom_decorator_height, 0.toFloat())
             _expansionStyle = a.getInt(R.styleable.DropDownView_expansion_style, DRAWER)
             isLastItemHasDivider = a.getBoolean(R.styleable.DropDownView_last_item_has_divider, true)
+            isArrowAlignEnd = a.getBoolean(R.styleable.DropDownView_arrow_align_end, false)
         } finally {
             a.recycle()
         }
 
-        orientation = LinearLayout.VERTICAL
+        orientation = VERTICAL
         View.inflate(context, R.layout.widget_dropdownview, this)
         filterContainer = findViewById(R.id.filter_container)
         filterTextView = findViewById(R.id.filter_text)
@@ -258,10 +266,9 @@ open class DropDownView : LinearLayout {
         dropDownContainer = findViewById(R.id.sv_dropdown_container)
         dropDownItemsContainer = findViewById(R.id.ll_dropdown_items_container)
         backgroundDimView = findViewById(R.id.background_dim)
-        filterPadding = findViewById(R.id.filter_padding)
 
         //Configure filter bar
-        val lp = filterContainer.layoutParams as LinearLayout.LayoutParams
+        val lp = filterContainer.layoutParams
         lp.height = filterHeight.toInt()
         filterContainer.layoutParams = lp
         filterContainer.setBackgroundColor(ContextCompat.getColor(context, filterBarBackgroundColor))
@@ -278,16 +285,18 @@ open class DropDownView : LinearLayout {
             _selectingPosition = 0
         }
 
-        //Configure filter and arrow spacing
-        val lpSpacing = filterPadding.layoutParams as LinearLayout.LayoutParams
-        lpSpacing.width = filterTextArrowPadding.toInt()
-        filterPadding.layoutParams = lpSpacing
-
         //Configure arrow
         if (arrowWidth > -1 || arrowHeight > -1) {
-            val arrowLp = filterArrow.layoutParams as LinearLayout.LayoutParams
+            val arrowLp = filterArrow.layoutParams as RelativeLayout.LayoutParams
             if (arrowHeight > -1) arrowLp.height = arrowHeight.toInt()
             if (arrowWidth > -1) arrowLp.width = arrowWidth.toInt()
+            if (isArrowAlignEnd) {
+                arrowLp.addRule(RelativeLayout.ALIGN_PARENT_END)
+            } else {
+                arrowLp.addRule(RelativeLayout.END_OF, R.id.filter_text)
+            }
+            arrowLp.marginStart = arrowStartMargin.toInt()
+            arrowLp.marginEnd = arrowEndMargin.toInt()
             filterArrow.layoutParams = arrowLp
         }
         if (arrowDrawableResId != 0) {

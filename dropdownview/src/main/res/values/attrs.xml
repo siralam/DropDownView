@@ -6,7 +6,8 @@
         <attr name="filter_text_size" format="dimension"/>
         <attr name="filter_text_color" format="reference"/>
         <attr name="filter_bar_background_color" format="reference"/>
-        <attr name="filter_text_arrow_padding" format="dimension"/>
+        <attr name="arrow_start_margin" format="dimension"/>
+        <attr name="arrow_end_margin" format="dimension"/>
         <attr name="arrow_width" format="dimension" />
         <attr name="arrow_height" format="dimension" />
         <attr name="arrow_drawable" format="reference" />
@@ -41,6 +42,7 @@
             <enum name="drawer" value="1"/>
         </attr>
         <attr name="last_item_has_divider" format="boolean"/>
+        <attr name="arrow_align_end" format="boolean"/>
     </declare-styleable>
 
 
