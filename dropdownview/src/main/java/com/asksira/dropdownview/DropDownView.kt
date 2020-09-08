@@ -52,97 +52,70 @@ open class DropDownView : LinearLayout {
 
     //Configurable Attributes
     @Px
-    var filterHeight: Float = 0.toFloat()
-        set(value) {
-            field = value
-            requestLayout()
-        }
+    protected var filterHeight: Float = 0.toFloat()
     @Px
-    var textSize: Float = 0.toFloat()
-        set(value) {
-            field = value
-            requestLayout()
-        }
+    protected var textSize: Float = 0.toFloat()
     @ColorRes
-    var filterTextColor: Int = 0
-        set(value) {
-            field = value
-            invalidate()
-        }
+    protected var filterTextColor: Int = 0
     @ColorRes
-    var filterBarBackgroundColor: Int = 0
-        set(value) {
-            field = value
-            invalidate()
-        }
+    protected var filterBarBackgroundColor: Int = 0
     @Px
-    var arrowStartMargin: Float = 0.toFloat()
-        set(value) {
-            field = value
-            requestLayout()
-        }
+    protected var arrowStartMargin: Float = 0.toFloat()
     @Px
-    var arrowEndMargin: Float = 0.toFloat()
-        set(value) {
-            field = value
-            requestLayout()
-        }
+    protected var arrowEndMargin: Float = 0.toFloat()
     @Px
-    var arrowWidth: Float = 0.toFloat()
-        set(value) {
-            field = value
-            requestLayout()
-        }
+    protected var arrowWidth: Float = 0.toFloat()
     @Px
-    var arrowHeight: Float = 0.toFloat()
-        set(value) {
-            field = value
-            requestLayout()
-        }
+    protected var arrowHeight: Float = 0.toFloat()
     @DrawableRes
-    var arrowDrawableResId: Int = 0
-        set(value) {
-            field = value
-            invalidate()
-        }
-    var isArrowRotate: Boolean = false
+    protected var arrowDrawableResId: Int = 0
     @Px
-    var dividerHeight: Float = 0.toFloat()
+    protected var dividerHeight: Float = 0.toFloat()
     @ColorRes
-    var dividerColor: Int = 0
+    protected  var dividerColor: Int = 0
     @Px
-    var dropDownItemHeight: Float = 0.toFloat()
+    protected var dropDownItemHeight: Float = 0.toFloat()
     @Px
-    var dropDownItemTextSize: Float = 0.toFloat()
+    protected var dropDownItemTextSize: Float = 0.toFloat()
     @Px
-    var dropDownItemTextSizeSelected: Float = 0.toFloat()
+    protected var dropDownItemTextSizeSelected: Float = 0.toFloat()
     @ColorRes
-    var dropDownItemTextColor: Int = 0
+    protected var dropDownItemTextColor: Int = 0
     @ColorRes
-    var dropDownItemTextColorSelected: Int = 0
+    protected var dropDownItemTextColorSelected: Int = 0
     @ColorRes
-    var dropDownBackgroundColor: Int = 0
+    protected var dropDownBackgroundColor: Int = 0
     @ColorRes
-    var dropDownBackgroundColorSelected: Int = 0
-    var isExpandDimBackground: Boolean = false
+    protected var dropDownBackgroundColorSelected: Int = 0
     @ColorRes
-    var dimBackgroundColor: Int = 0
-        set(value) {
-            field = value
-            invalidate()
-        }
-    var isExpandIncludeSelectedItem: Boolean = false
-    var placeholderText: String? = null
-        set(value) {
-            field = value
-            requestLayout()
-        }
+    protected var dimBackgroundColor: Int = 0
     @FontRes
-    var typeface: Int = 0
+    protected var typeface: Int = 0
+    @DrawableRes
+    protected var dropdownItemCompoundDrawable:Int = 0
+    @ColorRes
+    protected var topDecoratorColor: Int = 0
+    @Px
+    protected var topDecoratorHeight: Float = 0.toFloat()
+    @ColorRes
+    protected var bottomDecoratorColor: Int = 0
+    @Px
+    protected var bottomDecoratorHeight: Float = 0.toFloat()
+    protected var isArrowAlignEnd = false
+
+    var isArrowRotate: Boolean = false
+    var isExpandDimBackground: Boolean = false
+    var isExpandIncludeSelectedItem: Boolean = false
+    private var _placeholderText: String? = null
+    var placeholderText: String?
+        get() = _placeholderText
         set(value) {
-            field = value
-            requestLayout()
+            _placeholderText = value
+            if (selectingPosition == -1) {
+                filterTextView.text = value
+            }
         }
+
     var animationDuration: Int = 0
     var dropdownItemGravity = Gravity.CENTER
         set(value) {
@@ -153,23 +126,13 @@ open class DropDownView : LinearLayout {
                 else -> Gravity.CENTER
             }
         }
-    @DrawableRes
-    var dropdownItemCompoundDrawable:Int = 0
-    @ColorRes
-    var topDecoratorColor: Int = 0
-    @Px
-    var topDecoratorHeight: Float = 0.toFloat()
-    @ColorRes
-    var bottomDecoratorColor: Int = 0
-    @Px
-    var bottomDecoratorHeight: Float = 0.toFloat()
+
     private var _expansionStyle: Int = DRAWER
-    var expansionStyle: Int = DRAWER
+    var expansionStyle: Int
         get() = _expansionStyle
         set(value) {
             if (value != REVEAL && value != DRAWER) throw IllegalArgumentException("Unexpected expansionStyle." +
                     " It should be either REVEAL(0) or DRAWER(1).")
-            field = value
             _expansionStyle = value
             val lp = dropDownItemsContainer.layoutParams as FrameLayout.LayoutParams
             lp.gravity = if (value == REVEAL) {
@@ -179,11 +142,7 @@ open class DropDownView : LinearLayout {
             }
         }
     var isLastItemHasDivider = true
-    var isArrowAlignEnd = false
-        set(value) {
-            field = value
-            requestLayout()
-        }
+
     var isDeselectable = false
 
     //Runtime Attributes
@@ -247,7 +206,7 @@ open class DropDownView : LinearLayout {
             isExpandDimBackground = a.getBoolean(R.styleable.DropDownView_expand_dim_background, true)
             dimBackgroundColor = a.getResourceId(R.styleable.DropDownView_dim_background_color, R.color.dropdown_background_dim)
             isExpandIncludeSelectedItem = a.getBoolean(R.styleable.DropDownView_expand_include_selected_item, true)
-            placeholderText = a.getString(R.styleable.DropDownView_placeholder_text)
+            _placeholderText = a.getString(R.styleable.DropDownView_placeholder_text)
             typeface = a.getResourceId(R.styleable.DropDownView_dropdown_typeface, 0)
             animationDuration = a.getInteger(R.styleable.DropDownView_dropdown_animation_duration, 300)
             dropdownItemGravity = when (a.getInt(R.styleable.DropDownView_dropdownItem_text_gravity, Gravity.CENTER)) {

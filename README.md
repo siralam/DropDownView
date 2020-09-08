@@ -25,7 +25,7 @@ allprojects {
 And then add the below to your app's build.gradle:
 
 ```groovy
-    implementation 'com.asksira.android:dropdownview:1.1.0'
+    implementation 'com.asksira.android:dropdownview:1.1.1'
     implementation 'com.andkulikov:transitionseverywhere:2.1.0'
 ```
 
@@ -169,31 +169,13 @@ That's it!
     /**
      * View configurations
      */
-    dropDownView.setFilterHeight(float px);
-    dropDownView.setTextSize(float px);
-    dropDownView.setFilterTextColor(int colorResourceID);
-    dropDownView.setFilterBarBackgroundColor(int colorResourceID);
-    dropDownView.setArrowDrawableResId(int drawableResId);
     dropDownView.setArrowRotate(boolean yes);
-    dropDownView.setDividerHeight(float px);
-    dropDownView.setDividerColor(int colorResourceID) ;
-    dropDownView.setDropDownItemHeight(float px);
-    dropDownView.setDropDownItemTextSize(float px);
-    dropDownView.setDropDownItemTextColor(int colorResourceID);
-    dropDownView.setDropDownItemTextColorSelected(int colorResourceID);
-    dropDownView.setDropDownBackgroundColor(int colorResourceID);
     dropDownView.setExpandDimBackground(boolean yes);
     dropDownView.setExpandIncludeSelectedItem(boolean yes);
     dropDownView.setPlaceholderText(String placeholderText);
-    dropDownView.setTypeface(int fontResourceId);
     dropDownView.setAnimationDuration(int ms);
-    dropDownView.setArrowStartMargin(float px);
-    dropDownView.setArrowEndMargin(float px);
-    dropDownView.setArrowWidth(float px);
-    dropDownView.setArrowHeight(float px);
     dropDownView.setDropDownItemTextSizeSelected(float px);
     dropDownView.setDropDownBackgroundColorSelected(int colorResourceID);
-    dropDownView.setDimBackgroundColor(int colorResourceID);
     dropDownView.setDropdownItemGravity(int gravity);
     dropDownView.setDropdownItemCompoundDrawable(int drawableResId);
     dropDownView.setTopDecoratorColor(int colorResourceID);
@@ -202,7 +184,6 @@ That's it!
     dropDownView.setBottomDecoratorHeight(float px);
     dropDownView.setExpansionStyle(DropDownView.REVEAL);
     dropDownView.setLastItemHasDivider(false);
-    dropDownView.setIsArrowAlignEnd(true);
     dropDownView.setIsDeselectable(true);
 ```
 
@@ -229,6 +210,11 @@ But be aware that you need to do the below things when you override:
 1. If your have a lot of drop down items and `expansion_style="drawer"`(default), items are not scrollable. Looks like this is a limitation of Android framework itself where a `LinearLayout` in a `ScrollView` with `layout_gravity="bottom"` cannot be scollred. So I suggest you use `expansion_style="reveal"` if you have a lot of drop down items.
 
 ## Release notes
+
+v1.1.1
+
+1. Removed not-working run-time view configurations
+2. Fixed setPlaceholderText() not having effect immediately.
 
 v1.1.0
 
