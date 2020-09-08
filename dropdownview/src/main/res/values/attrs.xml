@@ -43,6 +43,7 @@
         </attr>
         <attr name="last_item_has_divider" format="boolean"/>
         <attr name="arrow_align_end" format="boolean"/>
+        <attr name="deselectable" format="boolean"/>
     </declare-styleable>
 
 

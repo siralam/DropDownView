@@ -31,7 +31,8 @@
         app:last_item_has_divider="false"
         app:arrow_align_end="false"
         app:arrow_start_margin="8dp"
-        app:arrow_end_margin="16dp"/>
+        app:arrow_end_margin="16dp"
+        app:deselectable="true"/>
 
 
 </RelativeLayout>

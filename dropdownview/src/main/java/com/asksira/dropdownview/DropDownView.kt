@@ -184,6 +184,7 @@ open class DropDownView : LinearLayout {
             field = value
             requestLayout()
         }
+    var isDeselectable = false
 
     //Runtime Attributes
     /**
@@ -191,13 +192,17 @@ open class DropDownView : LinearLayout {
      * Placeholder text will be shown, if configured.
      * This View is designed to disallow selecting -1 without a placeholder text.
      */
-    private var _selectingPosition: Int = 0
-    var selectingPosition: Int = 0
+    private var _selectingPosition: Int = -1
+    var selectingPosition: Int = -1
         get() = _selectingPosition
         set(value) {
             field = value
             _selectingPosition = value
-            filterTextView.text = dropDownItemList[selectingPosition]
+            if (value >= 0) {
+                filterTextView.text = dropDownItemList[selectingPosition]
+            } else {
+                filterTextView.text = placeholderText
+            }
             onSelectionListener?.onItemSelected(this@DropDownView, selectingPosition)
             collapse(true)
         }
@@ -258,6 +263,7 @@ open class DropDownView : LinearLayout {
             _expansionStyle = a.getInt(R.styleable.DropDownView_expansion_style, DRAWER)
             isLastItemHasDivider = a.getBoolean(R.styleable.DropDownView_last_item_has_divider, true)
             isArrowAlignEnd = a.getBoolean(R.styleable.DropDownView_arrow_align_end, false)
+            isDeselectable = a.getBoolean(R.styleable.DropDownView_deselectable, false)
         } finally {
             a.recycle()
         }
@@ -348,8 +354,10 @@ open class DropDownView : LinearLayout {
         updateDropDownItems()
         if (selectingPosition >= 0) {
             filterTextView.text = dropDownItemList[selectingPosition]
-            onSelectionListener?.onItemSelected(this@DropDownView, selectingPosition)
+        } else {
+            filterTextView.text = placeholderText
         }
+        onSelectionListener?.onItemSelected(this@DropDownView, selectingPosition)
         if (this.state == EXPANDED) {
             isFocusableInTouchMode = true
             requestFocus()
@@ -364,7 +372,7 @@ open class DropDownView : LinearLayout {
 
     internal class SavedState : BaseSavedState {
         var state: Int = 0
-        var selectingPosition: Int = 0
+        var selectingPosition: Int = -1
         var dropDownItems: List<String> = ArrayList()
 
         constructor(superState: Parcelable?) : super(superState)
@@ -508,7 +516,13 @@ open class DropDownView : LinearLayout {
             textView.setTextColor(ContextCompat.getColor(context!!, dropDownItemTextColor))
         }
         textView.gravity = dropdownItemGravity
-        textView.setOnClickListener { selectingPosition = index }
+        textView.setOnClickListener {
+            selectingPosition = if (isDeselectable && selectingPosition == index) {
+                -1
+            } else {
+                index
+            }
+        }
         return textView
     }
 

@@ -25,7 +25,7 @@ allprojects {
 And then add the below to your app's build.gradle:
 
 ```groovy
-    implementation 'com.asksira.android:dropdownview:1.0.4'
+    implementation 'com.asksira.android:dropdownview:1.1.0'
     implementation 'com.andkulikov:transitionseverywhere:2.1.0'
 ```
 
@@ -52,7 +52,8 @@ And then add the below to your app's build.gradle:
         app:last_item_has_divider="false"
         app:arrow_align_end="false"
         app:arrow_start_margin="8dp"
-        app:arrow_end_margin="16dp"/>
+        app:arrow_end_margin="16dp"
+        app:deselectable="false"/>
 ```
 
 **IMPORTANT**:  
@@ -97,6 +98,7 @@ Note that the opened drop down list is scrollable, so you don't need to worry ev
 | expansion_style                         | enum        | N/A   | drawer              | drawer / reveal                                                |
 | last_item_has_divider                   | boolean     | N/A   | true                |                                                                |
 | arrow_align_end                         | boolean     | N/A   | false               |                                                                |
+| deselectable                            | boolean     | N/A   | false               |                                                                |
 
 For the typeface (font), you must use the [Official font resource published together with support library v26](https://developer.android.com/guide/topics/ui/look-and-feel/fonts-in-xml.html). i.e. the xml should be something like `app:dropdown_typeface="@font/my_own_typeface"`
 
@@ -123,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(DropDownView view, int position) {
                 //Do something with the selected position
+                //If position is -1, it means nothing is selected. This should happen only if deselectable is true.
             }
         });
     }
@@ -200,6 +203,7 @@ That's it!
     dropDownView.setExpansionStyle(DropDownView.REVEAL);
     dropDownView.setLastItemHasDivider(false);
     dropDownView.setIsArrowAlignEnd(true);
+    dropDownView.setIsDeselectable(true);
 ```
 
 ### Tips
@@ -226,10 +230,11 @@ But be aware that you need to do the below things when you override:
 
 ## Release notes
 
-v1.0.4
+v1.1.0
 
-1. Added new feature: Allow aligning filter arrow to the end, and therefore allowing setting an arrow_end_margin.
-2. Updated to AndroidX.
+1. New feature: Allow aligning filter arrow to the end, and therefore allowing setting an arrow_end_margin.
+2. New feature: Allow de-selection by clicking on an already selected item, but you need to set `deselectable` to `true` first.
+3. Updated to AndroidX.
 
 v1.0.3
 

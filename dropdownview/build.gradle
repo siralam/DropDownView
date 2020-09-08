@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 104
-        versionName "1.0.4"
+        versionCode 10100
+        versionName "1.1.0"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -27,7 +27,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.andkulikov:transitionseverywhere:2.1.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 ext {
@@ -43,7 +42,7 @@ ext {
     siteUrl = 'https://github.com/siralam/DropDownView'
     gitUrl = 'https://github.com/siralam/DropDownView.git'
 
-    libraryVersion = '1.0.4'
+    libraryVersion = '1.1.0'
 
     developerId = 'siralam'
     developerName = 'Sira Lam'
