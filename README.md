@@ -8,11 +8,11 @@ A flexibly **configurable**, beautifully **animated**, device-**rotatable** drop
 
 ## Usage
 
-Minimum SDK: 16 
+Minimum SDK: 17
 
 ### Add to Project
 
-First make sure `jcenter()` is included as a repository in your **project**'s build.gradle:  
+First make sure `jcenter()` is included as a repository in your **project**'s build.gradle:
 
 ```groovy
 allprojects {
@@ -22,10 +22,11 @@ allprojects {
 }
 ```
 
-And then add the below to your app's build.gradle:  
+And then add the below to your app's build.gradle:
 
 ```groovy
-    implementation 'com.asksira.android:dropdownview:1.0.3'
+    implementation 'com.asksira.android:dropdownview:1.0.4'
+    implementation 'com.andkulikov:transitionseverywhere:2.1.0'
 ```
 
 ### Step 1: Create DropDownView in XML
@@ -48,7 +49,10 @@ And then add the below to your app's build.gradle:
         app:bottom_decorator_color="@android:color/holo_orange_dark"
         app:bottom_decorator_height="4dp"
         app:expansion_style="drawer"
-        app:last_item_has_divider="false"/>
+        app:last_item_has_divider="false"
+        app:arrow_align_end="false"
+        app:arrow_start_margin="8dp"
+        app:arrow_end_margin="16dp"/>
 ```
 
 **IMPORTANT**:  
@@ -57,46 +61,49 @@ Therefore its size is meant to be extended to the bottom of its parent.
 Therefore it should be placed on top of other views, in a `RelativeLayout` / `FrameLayout` / `ConstraintLayout`.
 Note that the opened drop down list is scrollable, so you don't need to worry even if you have a lot of selectable items.
 
-| Attribute Name                         | Type        | Unit  | Default             | Remarks                                                        |
-|----------------------------------------|-------------|-------|---------------------|----------------------------------------------------------------|
-| filter_height                          | Dimension   | dp    | 56dp                |                                                                |
-| filter_text_size                       | Dimension   | dp/sp | 18sp                |                                                                |
-| filter_text_color                      | Resource ID | N/A   | #212121             |                                                                |
-| filter_bar_background_color            | Resource ID | N/A   | Transparent         |                                                                |
-| filter_text_arrow_padding              | Dimension   | dp    | 8dp                 |                                                                |
-| arrow_width                            | Dimension   | dp    | wrap_content        |                                                                |
-| arrow_height                           | Dimension   | dp    | match_parent        | match_parent means same as filter bar height.                  |
-| arrow_drawable                         | Resource ID | N/A   | Default arrow       | Default is a black arrow from material design                  |
-| arrow_rotate                           | boolean     | N/A   | true                | The boolean stands for whether to animate.                     |
-| divider_height                         | Dimension   | dp    | 1dp                 |                                                                |
-| divider_color                          | Resource ID | N/A   | #BDBDBD             |                                                                |
-| dropDownItem_height                    | Dimension   | dp    | 48dp                |                                                                |
-| dropDownItem_text_size                 | Dimension   | dp/sp | 16sp                |                                                                |
-| dropDownItem_text_size_selected        | Dimension   | dp/sp | 16sp                |                                                                |
-| dropDownItem_text_color                | Resource ID | N/A   | #212121             |                                                                |
-| dropDownItem_text_color_selected       | Resource ID | N/A   | #212121             |                                                                |
-| dropDownItem_background_color          | Resource ID | N/A   | #FFFFFF             |                                                                |
-| dropDownItem_background_color_selected | Resource ID | N/A   | #FFFFFF             |                                                                |
-| expand_dim_background                  | boolean     | N/A   | true                |                                                                |
-| dim_background_color                   | Resource ID | N/A   | #80000000           |                                                                |
-| expand_include_selected_item           | boolean     | N/A   | true                | Whether the drop down list includes the already selected item. |
-| placeholder_text                       | String      | N/A   | Empty               |                                                                |
-| dropdown_typeface                      | Resource ID | N/A   | Default system font | More information below                                         |
-| dropdown_animation_duration            | int         | ms    | 300                 |                                                                |
-| dropdownItem_text_gravity              | enum        | N/A   | center_horizontal   | center_horizontal / start / end                                |
-| dropdownItem_compound_drawable_selected| Resource ID | N/A   | null                | An image that is displayed at the end of the dropdown item.    |
-| top_decorator_height                   | Dimension   | dp    | 0                   |                                                                |
-| top_decorator_color                    | Resource ID | N/A   | Transparent         |                                                                |
-| bottom_decorator_height                | Dimension   | dp    | 0                   |                                                                |
-| bottom_decorator_color                 | Resource ID | N/A   | Transparent         |                                                                |
-| expansion_style                        | enum        | N/A   | drawer              | drawer / reveal                                                |
-| last_item_has_divider                  | boolean     | N/A   | true                |                                                                |
+| Attribute Name                          | Type        | Unit  | Default             | Remarks                                                        |
+| --------------------------------------- | ----------- | ----- | ------------------- | -------------------------------------------------------------- |
+| filter_height                           | Dimension   | dp    | 56dp                |                                                                |
+| filter_text_size                        | Dimension   | dp/sp | 18sp                |                                                                |
+| filter_text_color                       | Resource ID | N/A   | #212121             |                                                                |
+| filter_bar_background_color             | Resource ID | N/A   | Transparent         |                                                                |
+| arrow_start_margin                      | Dimension   | dp    | 8dp                 |                                                                |
+| arrow_end_margin                        | Dimension   | dp    | 0dp                 |                                                                |
+| arrow_width                             | Dimension   | dp    | wrap_content        |                                                                |
+| arrow_height                            | Dimension   | dp    | match_parent        | match_parent means same as filter bar height.                  |
+| arrow_drawable                          | Resource ID | N/A   | Default arrow       | Default is a black arrow from material design                  |
+| arrow_rotate                            | boolean     | N/A   | true                | The boolean stands for whether to animate.                     |
+| divider_height                          | Dimension   | dp    | 1dp                 |                                                                |
+| divider_color                           | Resource ID | N/A   | #BDBDBD             |                                                                |
+| dropDownItem_height                     | Dimension   | dp    | 48dp                |                                                                |
+| dropDownItem_text_size                  | Dimension   | dp/sp | 16sp                |                                                                |
+| dropDownItem_text_size_selected         | Dimension   | dp/sp | 16sp                |                                                                |
+| dropDownItem_text_color                 | Resource ID | N/A   | #212121             |                                                                |
+| dropDownItem_text_color_selected        | Resource ID | N/A   | #212121             |                                                                |
+| dropDownItem_background_color           | Resource ID | N/A   | #FFFFFF             |                                                                |
+| dropDownItem_background_color_selected  | Resource ID | N/A   | #FFFFFF             |                                                                |
+| expand_dim_background                   | boolean     | N/A   | true                |                                                                |
+| dim_background_color                    | Resource ID | N/A   | #80000000           |                                                                |
+| expand_include_selected_item            | boolean     | N/A   | true                | Whether the drop down list includes the already selected item. |
+| placeholder_text                        | String      | N/A   | Empty               |                                                                |
+| dropdown_typeface                       | Resource ID | N/A   | Default system font | More information below                                         |
+| dropdown_animation_duration             | int         | ms    | 300                 |                                                                |
+| dropdownItem_text_gravity               | enum        | N/A   | center_horizontal   | center_horizontal / start / end                                |
+| dropdownItem_compound_drawable_selected | Resource ID | N/A   | null                | An image that is displayed at the end of the dropdown item.    |
+| top_decorator_height                    | Dimension   | dp    | 0                   |                                                                |
+| top_decorator_color                     | Resource ID | N/A   | Transparent         |                                                                |
+| bottom_decorator_height                 | Dimension   | dp    | 0                   |                                                                |
+| bottom_decorator_color                  | Resource ID | N/A   | Transparent         |                                                                |
+| expansion_style                         | enum        | N/A   | drawer              | drawer / reveal                                                |
+| last_item_has_divider                   | boolean     | N/A   | true                |                                                                |
+| arrow_align_end                         | boolean     | N/A   | false               |                                                                |
 
 For the typeface (font), you must use the [Official font resource published together with support library v26](https://developer.android.com/guide/topics/ui/look-and-feel/fonts-in-xml.html). i.e. the xml should be something like `app:dropdown_typeface="@font/my_own_typeface"`
 
 ### Step 2: Setup in Activity / Fragment
 
 You should
+
 1. Provide selectable items (`List<String>`) to DropDownView
 2. Set `OnSelectionListener` to DropDownView
 
@@ -123,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
 ```
 
 If you are using Kotlin, `setOnSelectionListener` should be like this:
+
 ```kotlin
         dropDownView.onSelectionListener = OnDropDownSelectionListener { view, position ->
             //...
@@ -176,7 +184,8 @@ That's it!
     dropDownView.setPlaceholderText(String placeholderText);
     dropDownView.setTypeface(int fontResourceId);
     dropDownView.setAnimationDuration(int ms);
-    dropDownView.setFilterTextArrowPadding(float px);
+    dropDownView.setArrowStartMargin(float px);
+    dropDownView.setArrowEndMargin(float px);
     dropDownView.setArrowWidth(float px);
     dropDownView.setArrowHeight(float px);
     dropDownView.setDropDownItemTextSizeSelected(float px);
@@ -190,11 +199,12 @@ That's it!
     dropDownView.setBottomDecoratorHeight(float px);
     dropDownView.setExpansionStyle(DropDownView.REVEAL);
     dropDownView.setLastItemHasDivider(false);
+    dropDownView.setIsArrowAlignEnd(true);
 ```
 
 ### Tips
 
-- In case you don't want to show an arrow, just set `filter_text_arrow_padding` and `arrow_width` both to 0dp.
+-   In case you don't want to show an arrow, just set `arrow_margin_start` and `arrow_width` both to 0dp.
 
 ### Customize your own DropDownItems
 
@@ -216,13 +226,21 @@ But be aware that you need to do the below things when you override:
 
 ## Release notes
 
+v1.0.4
+
+1. Added new feature: Allow aligning filter arrow to the end, and therefore allowing setting an arrow_end_margin.
+2. Updated to AndroidX.
+
 v1.0.3
+
 1. Exposed some more views.
 
 v1.0.2
+
 1. Fixed Issue #3.
 
 v1.0.1
+
 1. Converted to Kotlin.
 2. Solved Issue #2.
 3. Added Top and Bottom Decorator.

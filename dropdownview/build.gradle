@@ -26,8 +26,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    api 'com.andkulikov:transitionseverywhere:2.1.0'
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.andkulikov:transitionseverywhere:2.1.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 ext {
@@ -43,7 +43,7 @@ ext {
     siteUrl = 'https://github.com/siralam/DropDownView'
     gitUrl = 'https://github.com/siralam/DropDownView.git'
 
-    libraryVersion = '1.0.3'
+    libraryVersion = '1.0.4'
 
     developerId = 'siralam'
     developerName = 'Sira Lam'

@@ -180,6 +180,10 @@ open class DropDownView : LinearLayout {
         }
     var isLastItemHasDivider = true
     var isArrowAlignEnd = false
+        set(value) {
+            field = value
+            requestLayout()
+        }
 
     //Runtime Attributes
     /**
@@ -481,7 +485,7 @@ open class DropDownView : LinearLayout {
 
     protected open fun generateDropDownItem(itemName: String, index: Int): View {
         val textView = TextView(context)
-        val lp = LinearLayout.LayoutParams(MATCH_PARENT, dropDownItemHeight.toInt())
+        val lp = LayoutParams(MATCH_PARENT, dropDownItemHeight.toInt())
         textView.layoutParams = lp
         textView.text = itemName
         textView.setPadding(16.dp(), 0, 16.dp(), 0)
@@ -510,7 +514,7 @@ open class DropDownView : LinearLayout {
 
     private fun generateDivider(): View {
         val view = View(context)
-        val lp = LinearLayout.LayoutParams(
+        val lp = LayoutParams(
                 MATCH_PARENT, dividerHeight.toInt())
         view.layoutParams = lp
         view.setBackgroundColor(ContextCompat.getColor(context!!, dividerColor))
@@ -519,7 +523,7 @@ open class DropDownView : LinearLayout {
 
     private fun generateTopDecorator() : View {
         val view = View(context)
-        val lp = LinearLayout.LayoutParams(
+        val lp = LayoutParams(
                 MATCH_PARENT, topDecoratorHeight.toInt())
         view.layoutParams = lp
         view.setBackgroundColor(ContextCompat.getColor(context!!, topDecoratorColor))
@@ -528,7 +532,7 @@ open class DropDownView : LinearLayout {
 
     private fun generateBottomDecorator() : View {
         val view = View(context)
-        val lp = LinearLayout.LayoutParams(
+        val lp = LayoutParams(
                 MATCH_PARENT, bottomDecoratorHeight.toInt())
         view.layoutParams = lp
         view.setBackgroundColor(ContextCompat.getColor(context!!, bottomDecoratorColor))
